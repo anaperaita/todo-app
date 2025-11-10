@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { TodoFilters as TodoFiltersType, FilterStatus, SortOption } from '../../types';
 import { useTodoFiltersViewModel } from './useTodoFiltersViewModel';
 import styles from './TodoFilters.module.css';
@@ -16,6 +16,60 @@ export const TodoFilters: React.FC<TodoFiltersProps> = ({ filters, onFilterChang
     filters,
     onFilterChange,
   });
+
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const sortRef = useRef<HTMLDivElement>(null);
+
+  const handleStatusClick = (status: FilterStatus) => {
+    const event = {
+      target: { value: status }
+    } as React.ChangeEvent<HTMLSelectElement>;
+    handleStatusChange(event);
+  };
+
+  const handleSortClick = (sortBy: SortOption) => {
+    const event = {
+      target: { value: sortBy }
+    } as React.ChangeEvent<HTMLSelectElement>;
+    handleSortChange(event);
+    setIsSortOpen(false);
+  };
+
+  const getSortLabel = (sortBy: SortOption) => {
+    switch (sortBy) {
+      case SortOption.DATE_ADDED:
+        return 'Oldest First';
+      case SortOption.DATE_ADDED_DESC:
+        return 'Newest First';
+      case SortOption.DUE_DATE:
+        return 'Due Soon';
+      case SortOption.DUE_DATE_DESC:
+        return 'Due Later';
+      case SortOption.PRIORITY:
+        return 'Priority';
+      case SortOption.ALPHABETICAL:
+        return 'A-Z';
+      default:
+        return sortBy;
+    }
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
+        setIsSortOpen(false);
+      }
+    };
+
+    if (isSortOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSortOpen]);
 
   return (
     <div className={styles.filters}>
@@ -35,41 +89,93 @@ export const TodoFilters: React.FC<TodoFiltersProps> = ({ filters, onFilterChang
       </div>
 
       <div className={styles.controlsRow}>
-        <div className={styles.formGroup}>
-          <label htmlFor="filter-status" className={styles.label}>
-            Filter by Status
-          </label>
-          <select
-            id="filter-status"
-            value={filters.status}
-            onChange={handleStatusChange}
-            className={styles.select}
-            aria-label="Filter by status"
+        {/* Status Filter - Pill Buttons */}
+        <div className={styles.statusGroup} role="group" aria-label="Filter by status">
+          <button
+            onClick={() => handleStatusClick(FilterStatus.ALL)}
+            className={`${styles.statusPill} ${filters.status === FilterStatus.ALL ? styles.active : ''}`}
+            type="button"
+            aria-pressed={filters.status === FilterStatus.ALL}
           >
-            <option value={FilterStatus.ALL}>All</option>
-            <option value={FilterStatus.ACTIVE}>Active</option>
-            <option value={FilterStatus.COMPLETED}>Completed</option>
-          </select>
+            All
+          </button>
+          <button
+            onClick={() => handleStatusClick(FilterStatus.ACTIVE)}
+            className={`${styles.statusPill} ${filters.status === FilterStatus.ACTIVE ? styles.active : ''}`}
+            type="button"
+            aria-pressed={filters.status === FilterStatus.ACTIVE}
+          >
+            Active
+          </button>
+          <button
+            onClick={() => handleStatusClick(FilterStatus.COMPLETED)}
+            className={`${styles.statusPill} ${filters.status === FilterStatus.COMPLETED ? styles.active : ''}`}
+            type="button"
+            aria-pressed={filters.status === FilterStatus.COMPLETED}
+          >
+            Completed
+          </button>
         </div>
 
-        <div className={styles.formGroup}>
-          <label htmlFor="sort-by" className={styles.label}>
-            Sort By
-          </label>
-          <select
-            id="sort-by"
-            value={filters.sortBy}
-            onChange={handleSortChange}
-            className={styles.select}
-            aria-label="Sort by"
+        {/* Sort Dropdown - Custom */}
+        <div className={styles.sortContainer} ref={sortRef}>
+          <button
+            onClick={() => setIsSortOpen(!isSortOpen)}
+            className={styles.sortButton}
+            aria-label="Sort options"
+            aria-expanded={isSortOpen}
+            type="button"
           >
-            <option value={SortOption.DATE_ADDED}>Date Added (Oldest)</option>
-            <option value={SortOption.DATE_ADDED_DESC}>Date Added (Newest)</option>
-            <option value={SortOption.DUE_DATE}>Due Date (Earliest)</option>
-            <option value={SortOption.DUE_DATE_DESC}>Due Date (Latest)</option>
-            <option value={SortOption.PRIORITY}>Priority</option>
-            <option value={SortOption.ALPHABETICAL}>Alphabetical</option>
-          </select>
+            <span className={styles.sortIcon}>⇅</span>
+            {getSortLabel(filters.sortBy)}
+          </button>
+
+          {isSortOpen && (
+            <div className={styles.sortDropdown}>
+              <button
+                onClick={() => handleSortClick(SortOption.DATE_ADDED_DESC)}
+                className={`${styles.sortOption} ${filters.sortBy === SortOption.DATE_ADDED_DESC ? styles.active : ''}`}
+                type="button"
+              >
+                Newest First
+              </button>
+              <button
+                onClick={() => handleSortClick(SortOption.DATE_ADDED)}
+                className={`${styles.sortOption} ${filters.sortBy === SortOption.DATE_ADDED ? styles.active : ''}`}
+                type="button"
+              >
+                Oldest First
+              </button>
+              <button
+                onClick={() => handleSortClick(SortOption.DUE_DATE)}
+                className={`${styles.sortOption} ${filters.sortBy === SortOption.DUE_DATE ? styles.active : ''}`}
+                type="button"
+              >
+                Due Soon
+              </button>
+              <button
+                onClick={() => handleSortClick(SortOption.DUE_DATE_DESC)}
+                className={`${styles.sortOption} ${filters.sortBy === SortOption.DUE_DATE_DESC ? styles.active : ''}`}
+                type="button"
+              >
+                Due Later
+              </button>
+              <button
+                onClick={() => handleSortClick(SortOption.PRIORITY)}
+                className={`${styles.sortOption} ${filters.sortBy === SortOption.PRIORITY ? styles.active : ''}`}
+                type="button"
+              >
+                Priority
+              </button>
+              <button
+                onClick={() => handleSortClick(SortOption.ALPHABETICAL)}
+                className={`${styles.sortOption} ${filters.sortBy === SortOption.ALPHABETICAL ? styles.active : ''}`}
+                type="button"
+              >
+                A-Z
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
