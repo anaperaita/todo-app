@@ -24,20 +24,39 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({
   isDragging = false,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isStatusOpen, setIsStatusOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const statusRef = useRef<HTMLDivElement>(null);
 
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newStatus = e.target.value as KanbanStatus;
+  const handleStatusClick = (newStatus: KanbanStatus) => {
     onStatusChange(todo.id, newStatus);
+    setIsStatusOpen(false);
   };
 
   const handleMenuToggle = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
+  const handleStatusToggle = () => {
+    setIsStatusOpen((prev) => !prev);
+  };
+
   const handleDelete = () => {
     onDelete(todo.id);
     setIsMenuOpen(false);
+  };
+
+  const getStatusLabel = (status: KanbanStatus) => {
+    switch (status) {
+      case KanbanStatus.TODO:
+        return 'To Do';
+      case KanbanStatus.IN_PROGRESS:
+        return 'In Progress';
+      case KanbanStatus.DONE:
+        return 'Done';
+      default:
+        return status;
+    }
   };
 
   // Close menu when clicking outside
@@ -46,33 +65,62 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false);
       }
+      if (statusRef.current && !statusRef.current.contains(event.target as Node)) {
+        setIsStatusOpen(false);
+      }
     };
 
-    if (isMenuOpen) {
+    if (isMenuOpen || isStatusOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isMenuOpen]);
+  }, [isMenuOpen, isStatusOpen]);
 
   return (
     <div className={`${styles.card} ${isDragging ? styles.dragging : ''} ${styles[`priority__${todo.priority}`]}`}>
       {/* Header with status and menu */}
       <div className={styles.header}>
-        {/* Status Dropdown */}
-        <select
-          value={todo.status}
-          onChange={handleStatusChange}
-          className={styles.statusSelect}
-          aria-label="Change status"
-          title="Move to column"
-        >
-          <option value={KanbanStatus.TODO}>To Do</option>
-          <option value={KanbanStatus.IN_PROGRESS}>In Progress</option>
-          <option value={KanbanStatus.DONE}>Done</option>
-        </select>
+        {/* Custom Status Dropdown */}
+        <div className={styles.statusContainer} ref={statusRef}>
+          <button
+            onClick={handleStatusToggle}
+            className={`${styles.statusButton} ${styles[`status__${todo.status}`]}`}
+            aria-label="Change status"
+            aria-expanded={isStatusOpen}
+            type="button"
+          >
+            {getStatusLabel(todo.status)}
+          </button>
+
+          {isStatusOpen && (
+            <div className={styles.statusDropdown}>
+              <button
+                onClick={() => handleStatusClick(KanbanStatus.TODO)}
+                className={`${styles.statusOption} ${styles.status__TODO} ${todo.status === KanbanStatus.TODO ? styles.active : ''}`}
+                type="button"
+              >
+                To Do
+              </button>
+              <button
+                onClick={() => handleStatusClick(KanbanStatus.IN_PROGRESS)}
+                className={`${styles.statusOption} ${styles.status__IN_PROGRESS} ${todo.status === KanbanStatus.IN_PROGRESS ? styles.active : ''}`}
+                type="button"
+              >
+                In Progress
+              </button>
+              <button
+                onClick={() => handleStatusClick(KanbanStatus.DONE)}
+                className={`${styles.statusOption} ${styles.status__DONE} ${todo.status === KanbanStatus.DONE ? styles.active : ''}`}
+                type="button"
+              >
+                Done
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* Three-dot menu */}
         <div className={styles.menuContainer} ref={menuRef}>

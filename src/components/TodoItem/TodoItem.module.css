@@ -70,7 +70,13 @@
   outline-offset: 2px;
 }
 
-.statusSelect {
+/* Custom Status Dropdown */
+.statusContainer {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.statusButton {
   padding: 6px 12px;
   border: none;
   border-radius: 16px;
@@ -78,56 +84,131 @@
   cursor: pointer;
   transition: all var(--transition);
   font-weight: 600;
-  flex-shrink: 0;
   min-width: 100px;
   text-align: center;
-  appearance: none;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-top: 1px;
 }
 
-/* Status-specific colors */
-.statusSelect[value="TODO"] {
+.statusButton.status__TODO {
   background: rgba(138, 154, 123, 0.15);
   color: #5d6e4f;
 }
 
-.statusSelect[value="TODO"]:hover {
+.statusButton.status__TODO:hover {
   background: rgba(138, 154, 123, 0.25);
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(138, 154, 123, 0.2);
 }
 
-.statusSelect[value="IN_PROGRESS"] {
+.statusButton.status__IN_PROGRESS {
   background: rgba(232, 181, 93, 0.2);
   color: #d4930f;
 }
 
-.statusSelect[value="IN_PROGRESS"]:hover {
+.statusButton.status__IN_PROGRESS:hover {
   background: rgba(232, 181, 93, 0.3);
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(232, 181, 93, 0.3);
 }
 
-.statusSelect[value="DONE"] {
+.statusButton.status__DONE {
   background: rgba(138, 154, 123, 0.25);
   color: #4a5f3a;
 }
 
-.statusSelect[value="DONE"]:hover {
+.statusButton.status__DONE:hover {
   background: rgba(138, 154, 123, 0.35);
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(138, 154, 123, 0.3);
 }
 
-.statusSelect:focus-visible {
+.statusButton:focus-visible {
   outline: 2px solid var(--color-terracotta);
   outline-offset: 2px;
 }
 
-.statusSelect:active {
+.statusButton:active {
   transform: translateY(0);
+}
+
+.statusDropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(75, 63, 53, 0.15);
+  padding: 6px;
+  min-width: 140px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statusOption {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-weight: 600;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.statusOption.status__TODO {
+  background: rgba(138, 154, 123, 0.1);
+  color: #5d6e4f;
+}
+
+.statusOption.status__TODO:hover {
+  background: rgba(138, 154, 123, 0.2);
+  transform: translateX(2px);
+}
+
+.statusOption.status__TODO.active {
+  background: rgba(138, 154, 123, 0.25);
+  font-weight: 700;
+}
+
+.statusOption.status__IN_PROGRESS {
+  background: rgba(232, 181, 93, 0.15);
+  color: #d4930f;
+}
+
+.statusOption.status__IN_PROGRESS:hover {
+  background: rgba(232, 181, 93, 0.25);
+  transform: translateX(2px);
+}
+
+.statusOption.status__IN_PROGRESS.active {
+  background: rgba(232, 181, 93, 0.3);
+  font-weight: 700;
+}
+
+.statusOption.status__DONE {
+  background: rgba(138, 154, 123, 0.15);
+  color: #4a5f3a;
+}
+
+.statusOption.status__DONE:hover {
+  background: rgba(138, 154, 123, 0.25);
+  transform: translateX(2px);
+}
+
+.statusOption.status__DONE.active {
+  background: rgba(138, 154, 123, 0.35);
+  font-weight: 700;
+}
+
+.statusOption:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: -2px;
 }
 
 .textContent {
