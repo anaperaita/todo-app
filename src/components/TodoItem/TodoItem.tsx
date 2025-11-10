@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Todo, UpdateTodoInput, Priority } from '../../types';
+import { Todo, UpdateTodoInput, Priority, KanbanStatus } from '../../types';
 import { useTodoItemViewModel } from './useTodoItemViewModel';
 import { formatDueDate } from '../../utils';
 import styles from './TodoItem.module.css';
@@ -21,7 +21,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, on
     editPriority,
     editCategory,
     editDueDate,
-    handleToggle,
     handleDelete,
     handleEdit,
     handleCancelEdit,
@@ -31,6 +30,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, on
     handleCategoryChange,
     handleDueDateChange,
     handleKeyDown,
+    handleStatusChange,
   } = useTodoItemViewModel({ todo, onToggle, onDelete, onUpdate });
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -100,13 +100,18 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, on
   return (
     <div className={`${styles.todoItem} ${styles[priorityClass]}`}>
       <div className={styles.mainContent}>
-        <input
-          type="checkbox"
-          checked={todo.completed}
-          onChange={handleToggle}
-          className={styles.checkbox}
-          aria-label={todo.text}
-        />
+        {/* Status Dropdown */}
+        <select
+          value={todo.status}
+          onChange={handleStatusChange}
+          className={styles.statusSelect}
+          aria-label="Change status"
+          title="Change status"
+        >
+          <option value={KanbanStatus.TODO}>To Do</option>
+          <option value={KanbanStatus.IN_PROGRESS}>In Progress</option>
+          <option value={KanbanStatus.DONE}>Done</option>
+        </select>
 
         <div className={styles.textContent}>
           <span className={`${styles.text} ${todo.completed ? styles.completed : ''}`}>

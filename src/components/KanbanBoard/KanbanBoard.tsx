@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core';
 import { Todo, TodoFilters, UpdateTodoInput, KanbanStatus } from '../../types';
 import { KanbanColumn } from '../KanbanColumn';
@@ -39,6 +39,17 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   const totalTodos = todos.length;
   const hasNoTodos = totalTodos === 0;
 
+  // Tips banner dismissal state
+  const [isTipsDismissed, setIsTipsDismissed] = useState(() => {
+    const stored = localStorage.getItem('kanban-tips-dismissed');
+    return stored === 'true';
+  });
+
+  const handleDismissTips = () => {
+    setIsTipsDismissed(true);
+    localStorage.setItem('kanban-tips-dismissed', 'true');
+  };
+
   // Empty state when no todos exist
   if (hasNoTodos) {
     return (
@@ -54,12 +65,26 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
   return (
     <div className={styles.board}>
-      {/* Keyboard Instructions */}
-      <div className={styles.instructions}>
-        <div className={styles.instructionsTitle}>💡 Drag & Drop Tips</div>
-        <strong>Mouse:</strong> Click and drag cards between columns. {' '}
-        <strong>Keyboard:</strong> Press Space to pick up, Arrow keys to move, Space to drop, or Escape to cancel.
-      </div>
+      {/* Keyboard Instructions - Dismissible */}
+      {!isTipsDismissed && (
+        <div className={styles.instructions}>
+          <div className={styles.instructionsHeader}>
+            <div className={styles.instructionsTitle}>💡 Drag & Drop Tips</div>
+            <button
+              onClick={handleDismissTips}
+              className={styles.dismissButton}
+              aria-label="Dismiss tips"
+              type="button"
+            >
+              ✕
+            </button>
+          </div>
+          <div className={styles.instructionsContent}>
+            <strong>Mouse:</strong> Click and drag cards between columns.{' '}
+            <strong>Keyboard:</strong> Press Space to pick up, Arrow keys to move, Space to drop, or Escape to cancel.
+          </div>
+        </div>
+      )}
 
       {/* Screen reader announcements */}
       <div role="status" aria-live="polite" aria-atomic="true" className={styles.srOnly}>

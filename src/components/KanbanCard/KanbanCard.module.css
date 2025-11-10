@@ -73,7 +73,7 @@
   flex-wrap: wrap;
   gap: var(--spacing-xs);
   align-items: center;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 0;
 }
 
 .priority {
@@ -141,47 +141,145 @@
 }
 
 .statusSelect {
-  padding: 4px var(--spacing-xs);
-  border: 1px solid rgba(107, 84, 68, 0.2);
-  border-radius: 4px;
-  background: white;
-  font-size: 0.75rem;
-  color: var(--color-text-primary);
+  padding: 6px 12px;
+  border: none;
+  border-radius: 16px;
+  font-size: 0.6875rem;
   cursor: pointer;
   transition: all var(--transition);
-  font-weight: 500;
+  font-weight: 600;
+  flex-shrink: 0;
+  min-width: 100px;
+  text-align: center;
+  appearance: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.statusSelect:hover {
-  border-color: var(--color-terracotta);
-  background: rgba(212, 118, 79, 0.05);
+/* Status-specific colors */
+.statusSelect[value="TODO"] {
+  background: rgba(138, 154, 123, 0.15);
+  color: #5d6e4f;
+}
+
+.statusSelect[value="TODO"]:hover {
+  background: rgba(138, 154, 123, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(138, 154, 123, 0.2);
+}
+
+.statusSelect[value="IN_PROGRESS"] {
+  background: rgba(232, 181, 93, 0.2);
+  color: #d4930f;
+}
+
+.statusSelect[value="IN_PROGRESS"]:hover {
+  background: rgba(232, 181, 93, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(232, 181, 93, 0.3);
+}
+
+.statusSelect[value="DONE"] {
+  background: rgba(138, 154, 123, 0.25);
+  color: #4a5f3a;
+}
+
+.statusSelect[value="DONE"]:hover {
+  background: rgba(138, 154, 123, 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(138, 154, 123, 0.3);
 }
 
 .statusSelect:focus-visible {
   outline: 2px solid var(--color-terracotta);
-  outline-offset: 1px;
+  outline-offset: 2px;
 }
 
-.deleteButton {
-  padding: 4px var(--spacing-xs);
-  border: 1px solid rgba(217, 112, 112, 0.3);
-  background: rgba(217, 112, 112, 0.1);
-  color: #c94545;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
+.statusSelect:active {
+  transform: translateY(0);
+}
+
+/* Three-dot menu */
+.menuContainer {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.menuButton {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 1.25rem;
   cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
   transition: all var(--transition);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
 }
 
-.deleteButton:hover {
-  background: rgba(217, 112, 112, 0.2);
-  border-color: #c94545;
+.menuButton:hover {
+  background: rgba(107, 84, 68, 0.08);
+  color: var(--color-text-primary);
 }
 
-.deleteButton:focus-visible {
-  outline: 2px solid #c94545;
-  outline-offset: 1px;
+.menuButton:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 2px;
+}
+
+.menuButton:active {
+  background: rgba(107, 84, 68, 0.15);
+}
+
+.menuDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid rgba(138, 154, 123, 0.2);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(75, 63, 53, 0.15);
+  min-width: 120px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+
+.menuItem:hover {
+  background: rgba(138, 154, 123, 0.1);
+}
+
+.menuItem.danger {
+  color: #c44536;
+}
+
+.menuItem.danger:hover {
+  background: rgba(196, 69, 54, 0.1);
+}
+
+.menuItem:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: -2px;
 }
 
 /* Drag handle indicator */
@@ -208,7 +306,7 @@
   .card,
   .card:hover,
   .statusSelect,
-  .deleteButton {
+  .statusSelect:hover {
     transition: none;
     transform: none;
   }

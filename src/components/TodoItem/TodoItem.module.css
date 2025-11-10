@@ -31,7 +31,7 @@
 .mainContent {
   display: flex;
   align-items: flex-start;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   flex: 1;
 }
 
@@ -68,6 +68,66 @@
 .checkbox:focus-visible {
   outline: 2px solid var(--color-terracotta);
   outline-offset: 2px;
+}
+
+.statusSelect {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 16px;
+  font-size: 0.6875rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-weight: 600;
+  flex-shrink: 0;
+  min-width: 100px;
+  text-align: center;
+  appearance: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 1px;
+}
+
+/* Status-specific colors */
+.statusSelect[value="TODO"] {
+  background: rgba(138, 154, 123, 0.15);
+  color: #5d6e4f;
+}
+
+.statusSelect[value="TODO"]:hover {
+  background: rgba(138, 154, 123, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(138, 154, 123, 0.2);
+}
+
+.statusSelect[value="IN_PROGRESS"] {
+  background: rgba(232, 181, 93, 0.2);
+  color: #d4930f;
+}
+
+.statusSelect[value="IN_PROGRESS"]:hover {
+  background: rgba(232, 181, 93, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(232, 181, 93, 0.3);
+}
+
+.statusSelect[value="DONE"] {
+  background: rgba(138, 154, 123, 0.25);
+  color: #4a5f3a;
+}
+
+.statusSelect[value="DONE"]:hover {
+  background: rgba(138, 154, 123, 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(138, 154, 123, 0.3);
+}
+
+.statusSelect:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 2px;
+}
+
+.statusSelect:active {
+  transform: translateY(0);
 }
 
 .textContent {

@@ -23,21 +23,65 @@
   padding: var(--spacing-md);
   border-radius: var(--border-radius);
   margin-bottom: var(--spacing-lg);
-  color: var(--color-text-secondary);
   font-size: 0.875rem;
   line-height: 1.6;
 }
 
-.instructions strong {
-  color: var(--color-text-primary);
-  font-weight: 600;
+.instructionsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xs);
 }
 
 .instructionsTitle {
   font-weight: 700;
   color: var(--color-earth);
-  margin: 0 0 var(--spacing-xs) 0;
+  margin: 0;
   font-size: 0.875rem;
+}
+
+.instructionsContent {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.instructionsContent strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.dismissButton {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all var(--transition);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.dismissButton:hover {
+  background: rgba(107, 84, 68, 0.1);
+  color: var(--color-text-primary);
+}
+
+.dismissButton:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 2px;
+}
+
+.dismissButton:active {
+  background: rgba(107, 84, 68, 0.15);
 }
 
 .columnsContainer {
@@ -124,6 +168,10 @@
     font-size: 0.8125rem;
     padding: var(--spacing-sm) var(--spacing-md);
   }
+
+  .instructionsContent {
+    font-size: 0.8125rem;
+  }
 }
 
 /* Responsive: Stack columns on mobile */
@@ -158,6 +206,10 @@
 
   .dragOverlay {
     transform: none;
+    transition: none;
+  }
+
+  .dismissButton {
     transition: none;
   }
 }

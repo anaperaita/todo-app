@@ -1,5 +1,5 @@
 import { useState, useCallback, ChangeEvent, KeyboardEvent } from 'react';
-import { Todo, UpdateTodoInput, Priority } from '../../types';
+import { Todo, UpdateTodoInput, Priority, KanbanStatus } from '../../types';
 
 interface TodoItemViewModel {
   isEditing: boolean;
@@ -17,6 +17,7 @@ interface TodoItemViewModel {
   handleCategoryChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleDueDateChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
+  handleStatusChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
 interface UseTodoItemViewModelProps {
@@ -113,6 +114,11 @@ export const useTodoItemViewModel = ({
     [handleSaveEdit, handleCancelEdit]
   );
 
+  const handleStatusChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+    const newStatus = e.target.value as KanbanStatus;
+    onUpdate(todo.id, { status: newStatus });
+  }, [todo.id, onUpdate]);
+
   return {
     isEditing,
     editText,
@@ -129,5 +135,6 @@ export const useTodoItemViewModel = ({
     handleCategoryChange,
     handleDueDateChange,
     handleKeyDown,
+    handleStatusChange,
   };
 };
