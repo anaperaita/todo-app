@@ -150,6 +150,39 @@ TodoForm/
 - `npm run build` - Create production build in build/ directory
 - `npm run eject` - Eject from create-react-app (irreversible)
 
+## Git Workflow
+
+**IMPORTANT: Always create a new branch before committing changes**
+
+When making any changes to the codebase:
+1. **Never commit directly to `main`** - Always create a feature branch first
+2. Use descriptive branch names following the pattern: `feature/description` or `fix/description`
+3. Examples:
+   - `feature/add-dark-mode`
+   - `fix/status-dropdown-bug`
+   - `refactor/clean-up-filters`
+
+**Workflow:**
+```bash
+# Create and switch to a new branch
+git checkout -b feature/your-feature-name
+
+# Make your changes, then stage and commit
+git add .
+git commit -m "Your commit message"
+
+# Push to remote
+git push -u origin feature/your-feature-name
+```
+
+**Branch Naming Convention:**
+- `feature/*` - New features
+- `fix/*` - Bug fixes
+- `refactor/*` - Code refactoring
+- `docs/*` - Documentation updates
+- `test/*` - Test additions or modifications
+- `chore/*` - Maintenance tasks
+
 ## Code Style - TypeScript
 
 **Strict Mode:**
