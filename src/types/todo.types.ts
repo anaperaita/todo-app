@@ -8,12 +8,6 @@ export enum Priority {
   HIGH = 'high',
 }
 
-export enum FilterStatus {
-  ALL = 'all',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-}
-
 export enum SortOption {
   DATE_ADDED = 'dateAdded',
   DATE_ADDED_DESC = 'dateAddedDesc',
@@ -47,7 +41,8 @@ export interface Todo {
 }
 
 export interface TodoFilters {
-  status: FilterStatus;
+  statuses: KanbanStatus[];  // Multi-select: filter by selected statuses
+  categories: string[];       // Multi-select: filter by selected categories
   searchText: string;
   sortBy: SortOption;
 }

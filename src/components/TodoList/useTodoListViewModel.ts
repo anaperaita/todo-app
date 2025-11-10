@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Todo, TodoFilters, FilterStatus, SortOption, Priority } from '../../types';
+import { Todo, TodoFilters, SortOption, Priority } from '../../types';
 
 interface TodoListViewModel {
   filteredAndSortedTodos: Todo[];
@@ -27,11 +27,14 @@ export const useTodoListViewModel = ({
   const filteredAndSortedTodos = useMemo(() => {
     let result = [...todos];
 
-    // Apply status filter
-    if (filters.status === FilterStatus.ACTIVE) {
-      result = result.filter((todo) => !todo.completed);
-    } else if (filters.status === FilterStatus.COMPLETED) {
-      result = result.filter((todo) => todo.completed);
+    // Apply status filter (multi-select)
+    if (filters.statuses.length > 0) {
+      result = result.filter((todo) => filters.statuses.includes(todo.status));
+    }
+
+    // Apply category filter (multi-select)
+    if (filters.categories.length > 0) {
+      result = result.filter((todo) => filters.categories.includes(todo.category));
     }
 
     // Apply search filter

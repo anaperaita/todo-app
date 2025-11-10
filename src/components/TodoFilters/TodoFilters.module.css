@@ -95,6 +95,46 @@
   outline-offset: 2px;
 }
 
+/* Category Pill Buttons */
+.categoryGroup {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  background: rgba(138, 154, 123, 0.08);
+  padding: 4px;
+  border-radius: 20px;
+}
+
+.categoryPill {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 14px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.categoryPill:hover {
+  background: rgba(138, 154, 123, 0.15);
+  color: var(--color-text-primary);
+}
+
+.categoryPill.active {
+  background: rgba(138, 154, 123, 0.25);
+  color: var(--color-earth);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(75, 63, 53, 0.08);
+}
+
+.categoryPill:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 2px;
+}
+
 /* Sort Custom Dropdown */
 .sortContainer {
   position: relative;

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { TodoList } from './TodoList';
-import { Todo, Priority, FilterStatus, SortOption, KanbanStatus } from '../../types';
+import { Todo, Priority, SortOption, KanbanStatus } from '../../types';
 
 const mockTodos: Todo[] = [
   {
@@ -54,7 +54,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -69,7 +69,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -84,7 +84,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={[]}
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText:'', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -100,7 +100,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -112,11 +112,11 @@ describe('TodoList', () => {
       expect(screen.getByText('Third task')).toBeInTheDocument();
     });
 
-    it('should show only active todos when filter is ACTIVE', () => {
+    it('should show only TODO status todos when filtered', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ACTIVE, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -128,11 +128,11 @@ describe('TodoList', () => {
       expect(screen.getByText('Third task')).toBeInTheDocument();
     });
 
-    it('should show only completed todos when filter is COMPLETED', () => {
+    it('should show only DONE status todos when filtered', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.COMPLETED, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -148,7 +148,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ALL, searchText: 'first', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText:'first', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -164,7 +164,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ALL, searchText: 'work', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText:'work', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -180,7 +180,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ACTIVE, searchText: 'work', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO], categories: [], searchText:'work', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -198,7 +198,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -215,7 +215,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED_DESC }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText:'', sortBy: SortOption.DATE_ADDED_DESC }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -232,7 +232,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.PRIORITY }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText:'', sortBy: SortOption.PRIORITY }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -249,7 +249,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.ALPHABETICAL }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText:'', sortBy: SortOption.ALPHABETICAL }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -266,7 +266,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DUE_DATE }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText:'', sortBy: SortOption.DUE_DATE }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -285,7 +285,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={[]}
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText:'', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -299,7 +299,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ALL, searchText: 'nonexistent', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText:'nonexistent', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -315,7 +315,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={allCompletedTodos}
-          filters={{ status: FilterStatus.ACTIVE, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO], categories: [], searchText:'', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -331,7 +331,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={mockTodos}
-          filters={{ status: FilterStatus.ALL, searchText: '   ', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText:'   ', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -347,7 +347,7 @@ describe('TodoList', () => {
       render(
         <TodoList
           todos={todosWithoutCategory}
-          filters={{ status: FilterStatus.ALL, searchText: 'first', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText:'first', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}

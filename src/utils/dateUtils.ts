@@ -2,6 +2,8 @@
  * Date utility functions for consistent date formatting across the application.
  */
 
+import { Todo } from '../types';
+
 /**
  * Formats a date string into a localized short date format.
  * @param dateString - ISO 8601 date string or null
@@ -20,4 +22,22 @@ export const formatDueDate = (dateString: string | null): string => {
   } catch {
     return '';
   }
+};
+
+/**
+ * Extracts unique categories from a list of todos.
+ * Returns a sorted array of category names, filtering out empty strings.
+ * @param todos - Array of todo items
+ * @returns Sorted array of unique category names
+ */
+export const getUniqueCategories = (todos: Todo[]): string[] => {
+  const categories = new Set<string>();
+
+  todos.forEach((todo) => {
+    if (todo.category && todo.category.trim()) {
+      categories.add(todo.category.trim());
+    }
+  });
+
+  return Array.from(categories).sort((a, b) => a.localeCompare(b));
 };

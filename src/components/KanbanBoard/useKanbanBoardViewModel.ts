@@ -10,7 +10,7 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { Todo, TodoFilters, FilterStatus, KanbanStatus, UpdateTodoInput } from '../../types';
+import { Todo, TodoFilters, KanbanStatus, UpdateTodoInput } from '../../types';
 
 interface KanbanBoardViewModel {
   todosByStatus: {
@@ -66,11 +66,14 @@ export const useKanbanBoardViewModel = ({
   const todosByStatus = useMemo(() => {
     let filteredTodos = [...todos];
 
-    // Apply status filter (active/completed)
-    if (filters.status === FilterStatus.ACTIVE) {
-      filteredTodos = filteredTodos.filter((todo) => !todo.completed);
-    } else if (filters.status === FilterStatus.COMPLETED) {
-      filteredTodos = filteredTodos.filter((todo) => todo.completed);
+    // Apply status filter (multi-select)
+    if (filters.statuses.length > 0) {
+      filteredTodos = filteredTodos.filter((todo) => filters.statuses.includes(todo.status));
+    }
+
+    // Apply category filter (multi-select)
+    if (filters.categories.length > 0) {
+      filteredTodos = filteredTodos.filter((todo) => filters.categories.includes(todo.category));
     }
 
     // Apply search filter

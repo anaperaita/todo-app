@@ -1,18 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { TodoFilters as TodoFiltersType, FilterStatus, SortOption } from '../../types';
+import { TodoFilters as TodoFiltersType, SortOption, KanbanStatus, Todo } from '../../types';
 import { useTodoFiltersViewModel } from './useTodoFiltersViewModel';
+import { getUniqueCategories } from '../../utils';
 import styles from './TodoFilters.module.css';
 
 export interface TodoFiltersProps {
   filters: TodoFiltersType;
   onFilterChange: (filters: TodoFiltersType) => void;
+  todos: Todo[];  // Needed to extract unique categories
 }
 
 /**
  * Filter and sort controls for the TODO list.
  */
-export const TodoFilters: React.FC<TodoFiltersProps> = ({ filters, onFilterChange }) => {
-  const { handleSearchChange, handleStatusChange, handleSortChange } = useTodoFiltersViewModel({
+export const TodoFilters: React.FC<TodoFiltersProps> = ({ filters, onFilterChange, todos }) => {
+  const { handleSearchChange, handleStatusToggle, handleCategoryToggle, handleSortChange } = useTodoFiltersViewModel({
     filters,
     onFilterChange,
   });
@@ -20,12 +22,7 @@ export const TodoFilters: React.FC<TodoFiltersProps> = ({ filters, onFilterChang
   const [isSortOpen, setIsSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
 
-  const handleStatusClick = (status: FilterStatus) => {
-    const event = {
-      target: { value: status }
-    } as React.ChangeEvent<HTMLSelectElement>;
-    handleStatusChange(event);
-  };
+  const uniqueCategories = getUniqueCategories(todos);
 
   const handleSortClick = (sortBy: SortOption) => {
     const event = {
@@ -89,33 +86,50 @@ export const TodoFilters: React.FC<TodoFiltersProps> = ({ filters, onFilterChang
       </div>
 
       <div className={styles.controlsRow}>
-        {/* Status Filter - Pill Buttons */}
+        {/* Status Filter - Multi-Select Pill Buttons */}
         <div className={styles.statusGroup} role="group" aria-label="Filter by status">
           <button
-            onClick={() => handleStatusClick(FilterStatus.ALL)}
-            className={`${styles.statusPill} ${filters.status === FilterStatus.ALL ? styles.active : ''}`}
+            onClick={() => handleStatusToggle(KanbanStatus.TODO)}
+            className={`${styles.statusPill} ${filters.statuses.includes(KanbanStatus.TODO) ? styles.active : ''}`}
             type="button"
-            aria-pressed={filters.status === FilterStatus.ALL}
+            aria-pressed={filters.statuses.includes(KanbanStatus.TODO)}
           >
-            All
+            To Do
           </button>
           <button
-            onClick={() => handleStatusClick(FilterStatus.ACTIVE)}
-            className={`${styles.statusPill} ${filters.status === FilterStatus.ACTIVE ? styles.active : ''}`}
+            onClick={() => handleStatusToggle(KanbanStatus.IN_PROGRESS)}
+            className={`${styles.statusPill} ${filters.statuses.includes(KanbanStatus.IN_PROGRESS) ? styles.active : ''}`}
             type="button"
-            aria-pressed={filters.status === FilterStatus.ACTIVE}
+            aria-pressed={filters.statuses.includes(KanbanStatus.IN_PROGRESS)}
           >
-            Active
+            In Progress
           </button>
           <button
-            onClick={() => handleStatusClick(FilterStatus.COMPLETED)}
-            className={`${styles.statusPill} ${filters.status === FilterStatus.COMPLETED ? styles.active : ''}`}
+            onClick={() => handleStatusToggle(KanbanStatus.DONE)}
+            className={`${styles.statusPill} ${filters.statuses.includes(KanbanStatus.DONE) ? styles.active : ''}`}
             type="button"
-            aria-pressed={filters.status === FilterStatus.COMPLETED}
+            aria-pressed={filters.statuses.includes(KanbanStatus.DONE)}
           >
-            Completed
+            Done
           </button>
         </div>
+
+        {/* Category Filter - Multi-Select Pill Buttons */}
+        {uniqueCategories.length > 0 && (
+          <div className={styles.categoryGroup} role="group" aria-label="Filter by category">
+            {uniqueCategories.map((category) => (
+              <button
+                key={category}
+                onClick={() => handleCategoryToggle(category)}
+                className={`${styles.categoryPill} ${filters.categories.includes(category) ? styles.active : ''}`}
+                type="button"
+                aria-pressed={filters.categories.includes(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Sort Dropdown - Custom */}
         <div className={styles.sortContainer} ref={sortRef}>
