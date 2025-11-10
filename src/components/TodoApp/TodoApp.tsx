@@ -112,7 +112,7 @@ export const TodoApp: React.FC = () => {
           {isSidebarExpanded && (
             <div className={styles.sidebarContent}>
               <h2 className={styles.sidebarTitle}>Filters & Sort</h2>
-              <TodoFilters filters={filters} onFilterChange={handleFilterChange} />
+              <TodoFilters filters={filters} onFilterChange={handleFilterChange} todos={todos} />
             </div>
           )}
 

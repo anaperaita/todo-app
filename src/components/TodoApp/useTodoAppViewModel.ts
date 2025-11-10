@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useTodoStorage } from '../../hooks';
-import { TodoFilters, FilterStatus, SortOption, CreateTodoInput, UpdateTodoInput } from '../../types';
+import { TodoFilters, SortOption, CreateTodoInput, UpdateTodoInput, KanbanStatus } from '../../types';
 
 interface TodoAppViewModel {
   todos: ReturnType<typeof useTodoStorage>['todos'];
@@ -20,9 +20,10 @@ export const useTodoAppViewModel = (): TodoAppViewModel => {
   const { todos, addTodo, toggleTodo, deleteTodo, updateTodo } = useTodoStorage();
 
   const [filters, setFilters] = useState<TodoFilters>({
-    status: FilterStatus.ALL,
+    statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE],  // All statuses selected by default
+    categories: [],  // Empty array = show all categories
     searchText: '',
-    sortBy: SortOption.DATE_ADDED,
+    sortBy: SortOption.DATE_ADDED_DESC,  // Newest first by default
   });
 
   const handleAddTodo = useCallback(

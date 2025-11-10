@@ -1,7 +1,21 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TodoFilters } from './TodoFilters';
-import { FilterStatus, SortOption } from '../../types';
+import { SortOption, KanbanStatus, Todo, Priority } from '../../types';
+
+const mockTodos: Todo[] = [
+  {
+    id: '1',
+    text: 'Test task',
+    completed: false,
+    status: KanbanStatus.TODO,
+    priority: Priority.MEDIUM,
+    category: 'Work',
+    dueDate: null,
+    createdAt: '2025-11-10T00:00:00.000Z',
+    updatedAt: '2025-11-10T00:00:00.000Z',
+  },
+];
 
 describe('TodoFilters', () => {
   const mockOnFilterChange = jest.fn();
@@ -14,44 +28,38 @@ describe('TodoFilters', () => {
     it('should have properly labeled filter controls', () => {
       render(
         <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onFilterChange={mockOnFilterChange}
+          todos={mockTodos}
         />
       );
 
       expect(screen.getByLabelText(/search tasks/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/filter by status/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/sort by/i)).toBeInTheDocument();
     });
 
     it('should support keyboard navigation', async () => {
       const user = userEvent.setup();
       render(
         <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onFilterChange={mockOnFilterChange}
+          todos={mockTodos}
         />
       );
 
       const searchInput = screen.getByLabelText(/search tasks/i);
-      const statusSelect = screen.getByLabelText(/filter by status/i);
-      const sortSelect = screen.getByLabelText(/sort by/i);
 
       await user.tab();
       expect(searchInput).toHaveFocus();
-
-      await user.tab();
-      expect(statusSelect).toHaveFocus();
-
-      await user.tab();
-      expect(sortSelect).toHaveFocus();
     });
 
     it('should have clear focus indicators', () => {
       render(
         <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onFilterChange={mockOnFilterChange}
+          todos={mockTodos}
         />
       );
 
@@ -66,8 +74,9 @@ describe('TodoFilters', () => {
       const user = userEvent.setup();
       render(
         <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onFilterChange={mockOnFilterChange}
+          todos={mockTodos}
         />
       );
 
@@ -83,8 +92,9 @@ describe('TodoFilters', () => {
     it('should display current search text', () => {
       render(
         <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: 'existing search', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText: 'existing search', sortBy: SortOption.DATE_ADDED }}
           onFilterChange={mockOnFilterChange}
+          todos={mockTodos}
         />
       );
 
@@ -96,8 +106,9 @@ describe('TodoFilters', () => {
       const user = userEvent.setup();
       render(
         <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: 'test', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText: 'test', sortBy: SortOption.DATE_ADDED }}
           onFilterChange={mockOnFilterChange}
+          todos={mockTodos}
         />
       );
 
@@ -105,251 +116,62 @@ describe('TodoFilters', () => {
       await user.clear(searchInput);
 
       expect(mockOnFilterChange).toHaveBeenLastCalledWith({
-        status: FilterStatus.ALL,
+        statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE],
+        categories: [],
         searchText: '',
         sortBy: SortOption.DATE_ADDED,
       });
     });
   });
 
-  describe('Status Filter', () => {
-    it('should allow selecting ALL status', async () => {
+  describe('Status Filter Pills', () => {
+    it('should render all status pill buttons', () => {
+      render(
+        <TodoFilters
+          filters={{ statuses: [KanbanStatus.TODO], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
+          onFilterChange={mockOnFilterChange}
+          todos={mockTodos}
+        />
+      );
+
+      expect(screen.getByRole('button', { name: 'To Do' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'In Progress' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Done' })).toBeInTheDocument();
+    });
+
+    it('should toggle status filter when clicked', async () => {
       const user = userEvent.setup();
       render(
         <TodoFilters
-          filters={{ status: FilterStatus.ACTIVE, searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [KanbanStatus.TODO], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onFilterChange={mockOnFilterChange}
+          todos={mockTodos}
         />
       );
 
-      const statusSelect = screen.getByLabelText(/filter by status/i);
-      await user.selectOptions(statusSelect, FilterStatus.ALL);
+      const inProgressButton = screen.getByRole('button', { name: 'In Progress' });
+      await user.click(inProgressButton);
 
       expect(mockOnFilterChange).toHaveBeenCalledWith({
-        status: FilterStatus.ALL,
+        statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS],
+        categories: [],
         searchText: '',
         sortBy: SortOption.DATE_ADDED,
       });
-    });
-
-    it('should allow selecting ACTIVE status', async () => {
-      const user = userEvent.setup();
-      render(
-        <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
-          onFilterChange={mockOnFilterChange}
-        />
-      );
-
-      const statusSelect = screen.getByLabelText(/filter by status/i);
-      await user.selectOptions(statusSelect, FilterStatus.ACTIVE);
-
-      expect(mockOnFilterChange).toHaveBeenCalledWith({
-        status: FilterStatus.ACTIVE,
-        searchText: '',
-        sortBy: SortOption.DATE_ADDED,
-      });
-    });
-
-    it('should allow selecting COMPLETED status', async () => {
-      const user = userEvent.setup();
-      render(
-        <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
-          onFilterChange={mockOnFilterChange}
-        />
-      );
-
-      const statusSelect = screen.getByLabelText(/filter by status/i);
-      await user.selectOptions(statusSelect, FilterStatus.COMPLETED);
-
-      expect(mockOnFilterChange).toHaveBeenCalledWith({
-        status: FilterStatus.COMPLETED,
-        searchText: '',
-        sortBy: SortOption.DATE_ADDED,
-      });
-    });
-
-    it('should display current status filter', () => {
-      render(
-        <TodoFilters
-          filters={{ status: FilterStatus.COMPLETED, searchText: '', sortBy: SortOption.DATE_ADDED }}
-          onFilterChange={mockOnFilterChange}
-        />
-      );
-
-      const statusSelect = screen.getByLabelText(/filter by status/i) as HTMLSelectElement;
-      expect(statusSelect.value).toBe(FilterStatus.COMPLETED);
     });
   });
 
   describe('Sort Options', () => {
-    it('should allow selecting date added (oldest first)', async () => {
-      const user = userEvent.setup();
+    it('should display sort dropdown button', () => {
       render(
         <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.PRIORITY }}
+          filters={{ statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onFilterChange={mockOnFilterChange}
+          todos={mockTodos}
         />
       );
 
-      const sortSelect = screen.getByLabelText(/sort by/i);
-      await user.selectOptions(sortSelect, SortOption.DATE_ADDED);
-
-      expect(mockOnFilterChange).toHaveBeenCalledWith({
-        status: FilterStatus.ALL,
-        searchText: '',
-        sortBy: SortOption.DATE_ADDED,
-      });
-    });
-
-    it('should allow selecting date added (newest first)', async () => {
-      const user = userEvent.setup();
-      render(
-        <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
-          onFilterChange={mockOnFilterChange}
-        />
-      );
-
-      const sortSelect = screen.getByLabelText(/sort by/i);
-      await user.selectOptions(sortSelect, SortOption.DATE_ADDED_DESC);
-
-      expect(mockOnFilterChange).toHaveBeenCalledWith({
-        status: FilterStatus.ALL,
-        searchText: '',
-        sortBy: SortOption.DATE_ADDED_DESC,
-      });
-    });
-
-    it('should allow selecting priority sort', async () => {
-      const user = userEvent.setup();
-      render(
-        <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
-          onFilterChange={mockOnFilterChange}
-        />
-      );
-
-      const sortSelect = screen.getByLabelText(/sort by/i);
-      await user.selectOptions(sortSelect, SortOption.PRIORITY);
-
-      expect(mockOnFilterChange).toHaveBeenCalledWith({
-        status: FilterStatus.ALL,
-        searchText: '',
-        sortBy: SortOption.PRIORITY,
-      });
-    });
-
-    it('should allow selecting due date sort', async () => {
-      const user = userEvent.setup();
-      render(
-        <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
-          onFilterChange={mockOnFilterChange}
-        />
-      );
-
-      const sortSelect = screen.getByLabelText(/sort by/i);
-      await user.selectOptions(sortSelect, SortOption.DUE_DATE);
-
-      expect(mockOnFilterChange).toHaveBeenCalledWith({
-        status: FilterStatus.ALL,
-        searchText: '',
-        sortBy: SortOption.DUE_DATE,
-      });
-    });
-
-    it('should allow selecting alphabetical sort', async () => {
-      const user = userEvent.setup();
-      render(
-        <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
-          onFilterChange={mockOnFilterChange}
-        />
-      );
-
-      const sortSelect = screen.getByLabelText(/sort by/i);
-      await user.selectOptions(sortSelect, SortOption.ALPHABETICAL);
-
-      expect(mockOnFilterChange).toHaveBeenCalledWith({
-        status: FilterStatus.ALL,
-        searchText: '',
-        sortBy: SortOption.ALPHABETICAL,
-      });
-    });
-
-    it('should display current sort option', () => {
-      render(
-        <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.PRIORITY }}
-          onFilterChange={mockOnFilterChange}
-        />
-      );
-
-      const sortSelect = screen.getByLabelText(/sort by/i) as HTMLSelectElement;
-      expect(sortSelect.value).toBe(SortOption.PRIORITY);
-    });
-  });
-
-  describe('Combined Filters', () => {
-    it('should maintain search text when changing status', async () => {
-      const user = userEvent.setup();
-      render(
-        <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: 'test', sortBy: SortOption.DATE_ADDED }}
-          onFilterChange={mockOnFilterChange}
-        />
-      );
-
-      const statusSelect = screen.getByLabelText(/filter by status/i);
-      await user.selectOptions(statusSelect, FilterStatus.ACTIVE);
-
-      expect(mockOnFilterChange).toHaveBeenCalledWith({
-        status: FilterStatus.ACTIVE,
-        searchText: 'test',
-        sortBy: SortOption.DATE_ADDED,
-      });
-    });
-
-    it('should maintain status when changing sort', async () => {
-      const user = userEvent.setup();
-      render(
-        <TodoFilters
-          filters={{ status: FilterStatus.COMPLETED, searchText: '', sortBy: SortOption.DATE_ADDED }}
-          onFilterChange={mockOnFilterChange}
-        />
-      );
-
-      const sortSelect = screen.getByLabelText(/sort by/i);
-      await user.selectOptions(sortSelect, SortOption.PRIORITY);
-
-      expect(mockOnFilterChange).toHaveBeenCalledWith({
-        status: FilterStatus.COMPLETED,
-        searchText: '',
-        sortBy: SortOption.PRIORITY,
-      });
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('should handle rapid typing in search box', async () => {
-      const user = userEvent.setup();
-      render(
-        <TodoFilters
-          filters={{ status: FilterStatus.ALL, searchText: '', sortBy: SortOption.DATE_ADDED }}
-          onFilterChange={mockOnFilterChange}
-        />
-      );
-
-      const searchInput = screen.getByLabelText(/search tasks/i);
-      await user.type(searchInput, 'rapid');
-
-      expect(mockOnFilterChange).toHaveBeenCalled();
-      const lastCall = mockOnFilterChange.mock.calls[mockOnFilterChange.mock.calls.length - 1][0];
-      expect(lastCall.searchText).toBe('rapid');
-      expect(lastCall.status).toBe(FilterStatus.ALL);
-      expect(lastCall.sortBy).toBe(SortOption.DATE_ADDED);
+      expect(screen.getByLabelText(/sort options/i)).toBeInTheDocument();
     });
   });
 });

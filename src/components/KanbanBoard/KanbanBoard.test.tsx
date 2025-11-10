@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { KanbanBoard } from './KanbanBoard';
-import { Todo, Priority, FilterStatus, SortOption, KanbanStatus } from '../../types';
+import { Todo, Priority, SortOption, KanbanStatus } from '../../types';
 
 describe('KanbanBoard', () => {
   const mockOnToggle = jest.fn();
@@ -8,7 +8,8 @@ describe('KanbanBoard', () => {
   const mockOnUpdate = jest.fn();
 
   const defaultFilters = {
-    status: FilterStatus.ALL,
+    statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE],
+    categories: [],
     searchText: '',
     sortBy: SortOption.DATE_ADDED,
   };
@@ -112,13 +113,14 @@ describe('KanbanBoard', () => {
       expect(screen.queryByText('Walk dog')).not.toBeInTheDocument();
     });
 
-    it('should filter todos by completion status', () => {
+    it('should filter todos by status', () => {
       const todos = [
-        createMockTodo({ id: '1', text: 'Active task', completed: false }),
-        createMockTodo({ id: '2', text: 'Completed task', completed: true }),
+        createMockTodo({ id: '1', text: 'Todo task', status: KanbanStatus.TODO }),
+        createMockTodo({ id: '2', text: 'In progress task', status: KanbanStatus.IN_PROGRESS }),
+        createMockTodo({ id: '3', text: 'Done task', status: KanbanStatus.DONE }),
       ];
 
-      const filters = { ...defaultFilters, status: FilterStatus.ACTIVE };
+      const filters = { ...defaultFilters, statuses: [KanbanStatus.TODO] };
 
       render(
         <KanbanBoard
@@ -130,8 +132,9 @@ describe('KanbanBoard', () => {
         />
       );
 
-      expect(screen.getByText('Active task')).toBeInTheDocument();
-      expect(screen.queryByText('Completed task')).not.toBeInTheDocument();
+      expect(screen.getByText('Todo task')).toBeInTheDocument();
+      expect(screen.queryByText('In progress task')).not.toBeInTheDocument();
+      expect(screen.queryByText('Done task')).not.toBeInTheDocument();
     });
 
     it('should filter by category in search', () => {
