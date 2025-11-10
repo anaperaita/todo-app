@@ -1,0 +1,163 @@
+/* KanbanBoard Styling */
+
+.board {
+  width: 100%;
+  height: 100%;
+  animation: fadeInUp 600ms ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.instructions {
+  background: rgba(138, 154, 123, 0.1);
+  border-left: 3px solid var(--color-sage);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.instructions strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.instructionsTitle {
+  font-weight: 700;
+  color: var(--color-earth);
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: 0.875rem;
+}
+
+.columnsContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+/* Drag overlay styling */
+.dragOverlay {
+  cursor: grabbing;
+  opacity: 0.9;
+  transform: rotate(3deg) scale(1.05);
+  box-shadow: 0 8px 24px rgba(75, 63, 53, 0.25);
+  z-index: 1000;
+}
+
+/* Screen reader only content */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Announcement region for screen readers */
+.announcements {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Empty board state */
+.emptyBoard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xl);
+  text-align: center;
+}
+
+.emptyBoardIcon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.3;
+}
+
+.emptyBoardTitle {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 1.5rem;
+  color: var(--color-earth);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.emptyBoardText {
+  color: var(--color-text-secondary);
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Responsive: Stack columns on tablets */
+@media (max-width: 1024px) {
+  .columnsContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .instructions {
+    font-size: 0.8125rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
+
+/* Responsive: Stack columns on mobile */
+@media (max-width: 768px) {
+  .columnsContainer {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .instructions {
+    display: none; /* Hide on mobile to save space */
+  }
+
+  .emptyBoardIcon {
+    font-size: 3rem;
+  }
+
+  .emptyBoardTitle {
+    font-size: 1.25rem;
+  }
+
+  .emptyBoardText {
+    font-size: 0.875rem;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .board {
+    animation: none;
+  }
+
+  .dragOverlay {
+    transform: none;
+    transition: none;
+  }
+}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TodoForm } from '../TodoForm';
 import { TodoFilters } from '../TodoFilters';
 import { TodoList } from '../TodoList';
+import { KanbanBoard } from '../KanbanBoard';
 import { SlideInPanel } from '../SlideInPanel';
 import { useTodoAppViewModel } from './useTodoAppViewModel';
 import { useTodoStatsViewModel } from '../TodoStats/useTodoStatsViewModel';
@@ -136,10 +137,13 @@ export const TodoApp: React.FC = () => {
               onUpdate={handleUpdateTodo}
             />
           ) : (
-            <div className={styles.kanbanPlaceholder}>
-              <h2>Kanban Board</h2>
-              <p>Coming next! 🎯</p>
-            </div>
+            <KanbanBoard
+              todos={todos}
+              filters={filters}
+              onToggle={handleToggleTodo}
+              onDelete={handleDeleteTodo}
+              onUpdate={handleUpdateTodo}
+            />
           )}
         </main>
       </div>

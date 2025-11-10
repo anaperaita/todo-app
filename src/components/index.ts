@@ -5,3 +5,6 @@ export * from './TodoList';
 export * from './TodoFilters';
 export * from './TodoStats';
 export * from './SlideInPanel';
+export * from './KanbanBoard';
+export * from './KanbanColumn';
+export * from './KanbanCard';

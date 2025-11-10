@@ -1,5 +1,6 @@
 import React from 'react';
 import { Todo, UpdateTodoInput, Priority, KanbanStatus } from '../../types';
+import { formatDueDate } from '../../utils';
 import styles from './KanbanCard.module.css';
 
 export interface KanbanCardProps {
@@ -22,19 +23,6 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({
   onStatusChange,
   isDragging = false,
 }) => {
-  const formatDueDate = (dateString: string | null): string => {
-    if (!dateString) return '';
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-      });
-    } catch {
-      return '';
-    }
-  };
-
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value as KanbanStatus;
     onStatusChange(todo.id, newStatus);
@@ -77,7 +65,7 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({
           <span className={styles.category}>{todo.category}</span>
         )}
         {todo.dueDate && (
-          <span className={styles.dueDate}>📅 {formatDueDate(todo.dueDate)}</span>
+          <span className={styles.dueDate}>{formatDueDate(todo.dueDate)}</span>
         )}
         <span className={styles.priority}>
           {todo.priority === Priority.HIGH && '🔴'}

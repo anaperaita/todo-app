@@ -33,10 +33,21 @@ src/
       useTodoStatsViewModel.ts
       TodoStats.tsx
       index.ts
-    KanbanBoard/          - Kanban board view (drag-drop)
-      components/
-    SlideInPanel/         - Reusable slide-in panel component
-      SlideInPanel.tsx
+    KanbanBoard/          - Kanban board container with drag-drop
+      KanbanBoard.tsx
+      useKanbanBoardViewModel.ts
+      KanbanBoard.module.css
+      KanbanBoard.test.tsx
+      index.ts
+    KanbanColumn/         - Individual Kanban column
+      KanbanColumn.tsx
+      useKanbanColumnViewModel.ts
+      KanbanColumn.module.css
+      KanbanColumn.test.tsx
+      index.ts
+    KanbanCard/           - Card for Kanban board
+      KanbanCard.tsx
+      KanbanCard.module.css
       index.ts
     index.ts              - Barrel export for all components
   hooks/
