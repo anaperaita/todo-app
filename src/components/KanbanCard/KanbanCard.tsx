@@ -82,70 +82,74 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({
   return (
     <div className={`${styles.card} ${isDragging ? styles.dragging : ''} ${styles[`priority__${todo.priority}`]}`}>
       {/* Header with status and menu */}
-      <div className={styles.header}>
-        {/* Custom Status Dropdown */}
-        <div className={styles.statusContainer} ref={statusRef}>
-          <button
-            onClick={handleStatusToggle}
-            className={`${styles.statusButton} ${styles[`status__${todo.status}`]}`}
-            aria-label="Change status"
-            aria-expanded={isStatusOpen}
-            type="button"
-          >
-            {getStatusLabel(todo.status)}
-          </button>
+      <div className={styles.cardHeader}>
+        <div className={styles.headerLeft}>
+          {/* Custom Status Dropdown */}
+          <div className={styles.statusContainer} ref={statusRef}>
+            <button
+              onClick={handleStatusToggle}
+              className={`${styles.statusButton} ${styles[`status__${todo.status}`]}`}
+              aria-label="Change status"
+              aria-expanded={isStatusOpen}
+              type="button"
+            >
+              {getStatusLabel(todo.status)}
+            </button>
 
-          {isStatusOpen && (
-            <div className={styles.statusDropdown}>
-              <button
-                onClick={() => handleStatusClick(KanbanStatus.TODO)}
-                className={`${styles.statusOption} ${styles.status__TODO} ${todo.status === KanbanStatus.TODO ? styles.active : ''}`}
-                type="button"
-              >
-                To Do
-              </button>
-              <button
-                onClick={() => handleStatusClick(KanbanStatus.IN_PROGRESS)}
-                className={`${styles.statusOption} ${styles.status__IN_PROGRESS} ${todo.status === KanbanStatus.IN_PROGRESS ? styles.active : ''}`}
-                type="button"
-              >
-                In Progress
-              </button>
-              <button
-                onClick={() => handleStatusClick(KanbanStatus.DONE)}
-                className={`${styles.statusOption} ${styles.status__DONE} ${todo.status === KanbanStatus.DONE ? styles.active : ''}`}
-                type="button"
-              >
-                Done
-              </button>
-            </div>
-          )}
+            {isStatusOpen && (
+              <div className={styles.statusDropdown}>
+                <button
+                  onClick={() => handleStatusClick(KanbanStatus.TODO)}
+                  className={`${styles.statusOption} ${styles.status__TODO} ${todo.status === KanbanStatus.TODO ? styles.active : ''}`}
+                  type="button"
+                >
+                  To Do
+                </button>
+                <button
+                  onClick={() => handleStatusClick(KanbanStatus.IN_PROGRESS)}
+                  className={`${styles.statusOption} ${styles.status__IN_PROGRESS} ${todo.status === KanbanStatus.IN_PROGRESS ? styles.active : ''}`}
+                  type="button"
+                >
+                  In Progress
+                </button>
+                <button
+                  onClick={() => handleStatusClick(KanbanStatus.DONE)}
+                  className={`${styles.statusOption} ${styles.status__DONE} ${todo.status === KanbanStatus.DONE ? styles.active : ''}`}
+                  type="button"
+                >
+                  Done
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Three-dot menu */}
-        <div className={styles.menuContainer} ref={menuRef}>
-          <button
-            onClick={handleMenuToggle}
-            className={styles.menuButton}
-            aria-label="Open menu"
-            aria-expanded={isMenuOpen}
-            type="button"
-          >
-            ⋮
-          </button>
+        <div className={styles.headerRight}>
+          {/* Three-dot menu */}
+          <div className={styles.menuContainer} ref={menuRef}>
+            <button
+              onClick={handleMenuToggle}
+              className={styles.menuButton}
+              aria-label="Open menu"
+              aria-expanded={isMenuOpen}
+              type="button"
+            >
+              ⋮
+            </button>
 
-          {isMenuOpen && (
-            <div className={styles.menuDropdown}>
-              <button
-                onClick={handleDelete}
-                className={`${styles.menuItem} ${styles.danger}`}
-                type="button"
-              >
-                <span>🗑️</span>
-                <span>Delete</span>
-              </button>
-            </div>
-          )}
+            {isMenuOpen && (
+              <div className={styles.menuDropdown}>
+                <button
+                  onClick={handleDelete}
+                  className={`${styles.menuItem} ${styles.danger}`}
+                  type="button"
+                >
+                  <span>🗑️</span>
+                  <span>Delete</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
