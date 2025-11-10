@@ -1,0 +1,144 @@
+version: 2
+
+# Dependabot configuration for automated dependency updates
+# Docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+updates:
+  # ===========================================
+  # npm Dependencies
+  # ===========================================
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Madrid"
+
+    # Limit concurrent PRs to avoid overwhelming the repo
+    open-pull-requests-limit: 5
+
+    # Add labels to PRs for easy filtering
+    labels:
+      - "dependencies"
+      - "npm"
+
+    # Commit message prefix
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+    # Reviewers and assignees (optional - uncomment to use)
+    # reviewers:
+    #   - "anaperaita"
+    # assignees:
+    #   - "anaperaita"
+
+    # Group updates to reduce PR noise
+    groups:
+      # Production dependencies - critical updates
+      production:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "react-scripts"
+          - "web-vitals"
+        update-types:
+          - "minor"
+          - "patch"
+
+      # React ecosystem
+      react-ecosystem:
+        patterns:
+          - "react*"
+          - "@types/react*"
+        exclude-patterns:
+          - "react-scripts"
+
+      # Testing libraries
+      testing:
+        patterns:
+          - "@testing-library/*"
+          - "jest*"
+          - "@types/jest"
+        dependency-type: "development"
+
+      # Build and bundler tools
+      build-tools:
+        patterns:
+          - "webpack*"
+          - "babel*"
+          - "@babel/*"
+          - "postcss*"
+        dependency-type: "development"
+
+      # Linting and code quality
+      linting:
+        patterns:
+          - "eslint*"
+          - "@typescript-eslint/*"
+        dependency-type: "development"
+
+      # TypeScript related
+      typescript:
+        patterns:
+          - "typescript"
+          - "@types/*"
+        exclude-patterns:
+          - "@types/react*"
+          - "@types/jest"
+        dependency-type: "development"
+
+      # Other development dependencies
+      dev-dependencies:
+        dependency-type: "development"
+        exclude-patterns:
+          - "@testing-library/*"
+          - "jest*"
+          - "eslint*"
+          - "@typescript-eslint/*"
+          - "typescript"
+          - "@types/*"
+          - "webpack*"
+          - "babel*"
+          - "@babel/*"
+          - "postcss*"
+
+    # Ignore specific packages (if needed)
+    ignore:
+      # Example: Ignore major version updates for react-scripts
+      # (CRA major updates often require migration)
+      - dependency-name: "react-scripts"
+        update-types: ["version-update:semver-major"]
+
+  # ===========================================
+  # GitHub Actions Workflows
+  # ===========================================
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Madrid"
+
+    # Limit concurrent PRs
+    open-pull-requests-limit: 2
+
+    # Add labels
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+    # Commit message prefix
+    commit-message:
+      prefix: "chore(ci)"
+
+    # Group all GitHub Actions updates together
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
