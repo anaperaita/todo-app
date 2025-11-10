@@ -32,8 +32,10 @@ jobs:
           node-version: '20.x'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci --frozen-lockfile
+      - name: Update lock file and install dependencies
+        run: |
+          npm install
+          npm ci --frozen-lockfile
 
       - name: Run ESLint
         run: npx eslint src/ --ext .ts,.tsx --max-warnings 0
@@ -84,8 +86,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci --frozen-lockfile
+      - name: Update lock file and install dependencies
+        run: |
+          npm install
+          npm ci --frozen-lockfile
 
       - name: Run tests with coverage
         run: npm test -- --watchAll=false --passWithNoTests --coverage
@@ -124,8 +128,10 @@ jobs:
           node-version: '20.x'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci --frozen-lockfile
+      - name: Update lock file and install dependencies
+        run: |
+          npm install
+          npm ci --frozen-lockfile
 
       - name: Build production bundle
         run: npm run build
