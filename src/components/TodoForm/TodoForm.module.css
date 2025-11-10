@@ -1,0 +1,131 @@
+:root {
+  --color-terracotta: #d4764f;
+  --color-terracotta-dark: #b85d38;
+  --color-sage: #8a9a7b;
+  --color-warm-brown: #6b5444;
+  --color-cream: #f5f1e8;
+  --color-sand: #e8dcc4;
+  --color-earth: #4a3f35;
+  --color-text-primary: #2d2520;
+  --color-text-secondary: #5a4e42;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --border-radius: 8px;
+  --transition: 200ms ease;
+}
+
+.form {
+  background: var(--color-cream);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(75, 63, 53, 0.1);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-warm-brown);
+  letter-spacing: 0.02em;
+}
+
+.input,
+.select {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--color-sand);
+  border-radius: calc(var(--border-radius) / 2);
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  background: white;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--color-terracotta);
+  box-shadow: 0 0 0 3px rgba(212, 118, 79, 0.1);
+}
+
+.input:focus-visible,
+.select:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 2px;
+}
+
+.input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+}
+
+.select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%236b5444' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--spacing-sm) center;
+  padding-right: calc(var(--spacing-md) * 2);
+}
+
+.submitButton {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-terracotta);
+  color: white;
+  border: none;
+  border-radius: calc(var(--border-radius) / 2);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition), transform var(--transition);
+  letter-spacing: 0.02em;
+}
+
+.submitButton:hover {
+  background: var(--color-terracotta-dark);
+  transform: translateY(-1px);
+}
+
+.submitButton:active {
+  transform: translateY(0);
+}
+
+.submitButton:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .input,
+  .select,
+  .submitButton {
+    transition: none;
+  }
+
+  .submitButton:hover {
+    transform: none;
+  }
+}
