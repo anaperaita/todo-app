@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core';
-import { Todo, TodoFilters, UpdateTodoInput, KanbanStatus } from '../../types';
+import { Todo, TodoFilters, UpdateTodoInput } from '../../types';
 import { KanbanColumn } from '../KanbanColumn';
 import { KanbanCard } from '../KanbanCard';
 import { useKanbanBoardViewModel } from './useKanbanBoardViewModel';
+import { useStatuses } from '../../context/StatusContext';
 import styles from './KanbanBoard.module.css';
 
 export interface KanbanBoardProps {
@@ -15,7 +16,7 @@ export interface KanbanBoardProps {
 }
 
 /**
- * Kanban board component displaying todos in three columns: To Do, In Progress, Done.
+ * Kanban board component displaying todos in dynamic columns based on available statuses.
  * Supports drag-and-drop between columns with keyboard navigation.
  */
 export const KanbanBoard: React.FC<KanbanBoardProps> = ({
@@ -25,6 +26,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   onDelete,
   onUpdate,
 }) => {
+  const { statuses } = useStatuses();
   const {
     todosByStatus,
     sensors,
@@ -99,31 +101,18 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
         onDragEnd={handleDragEnd}
         onDragCancel={handleDragCancel}
       >
-        {/* Three Columns */}
+        {/* Dynamic Columns based on available statuses */}
         <div className={styles.columnsContainer}>
-          <KanbanColumn
-            status={KanbanStatus.TODO}
-            todos={todosByStatus[KanbanStatus.TODO]}
-            onToggle={onToggle}
-            onDelete={onDelete}
-            onUpdate={onUpdate}
-          />
-
-          <KanbanColumn
-            status={KanbanStatus.IN_PROGRESS}
-            todos={todosByStatus[KanbanStatus.IN_PROGRESS]}
-            onToggle={onToggle}
-            onDelete={onDelete}
-            onUpdate={onUpdate}
-          />
-
-          <KanbanColumn
-            status={KanbanStatus.DONE}
-            todos={todosByStatus[KanbanStatus.DONE]}
-            onToggle={onToggle}
-            onDelete={onDelete}
-            onUpdate={onUpdate}
-          />
+          {statuses.map((status) => (
+            <KanbanColumn
+              key={status.id}
+              status={status}
+              todos={todosByStatus[status.id] || []}
+              onToggle={onToggle}
+              onDelete={onDelete}
+              onUpdate={onUpdate}
+            />
+          ))}
         </div>
 
         {/* Drag Overlay - shows card while dragging */}

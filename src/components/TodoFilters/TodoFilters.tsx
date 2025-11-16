@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { TodoFilters as TodoFiltersType, SortOption, KanbanStatus, Todo } from '../../types';
+import { TodoFilters as TodoFiltersType, SortOption, Todo } from '../../types';
 import { useTodoFiltersViewModel } from './useTodoFiltersViewModel';
 import { getUniqueCategories } from '../../utils';
+import { useStatuses } from '../../context/StatusContext';
 import styles from './TodoFilters.module.css';
 
 export interface TodoFiltersProps {
@@ -14,6 +15,7 @@ export interface TodoFiltersProps {
  * Filter and sort controls for the TODO list.
  */
 export const TodoFilters: React.FC<TodoFiltersProps> = ({ filters, onFilterChange, todos }) => {
+  const { statuses } = useStatuses();
   const { handleSearchChange, handleStatusToggle, handleCategoryToggle, handleSortChange } = useTodoFiltersViewModel({
     filters,
     onFilterChange,
@@ -86,32 +88,19 @@ export const TodoFilters: React.FC<TodoFiltersProps> = ({ filters, onFilterChang
       </div>
 
       <div className={styles.controlsRow}>
-        {/* Status Filter - Multi-Select Pill Buttons */}
+        {/* Status Filter - Multi-Select Pill Buttons (Dynamic) */}
         <div className={styles.statusGroup} role="group" aria-label="Filter by status">
-          <button
-            onClick={() => handleStatusToggle(KanbanStatus.TODO)}
-            className={`${styles.statusPill} ${filters.statuses.includes(KanbanStatus.TODO) ? styles.active : ''}`}
-            type="button"
-            aria-pressed={filters.statuses.includes(KanbanStatus.TODO)}
-          >
-            To Do
-          </button>
-          <button
-            onClick={() => handleStatusToggle(KanbanStatus.IN_PROGRESS)}
-            className={`${styles.statusPill} ${filters.statuses.includes(KanbanStatus.IN_PROGRESS) ? styles.active : ''}`}
-            type="button"
-            aria-pressed={filters.statuses.includes(KanbanStatus.IN_PROGRESS)}
-          >
-            In Progress
-          </button>
-          <button
-            onClick={() => handleStatusToggle(KanbanStatus.DONE)}
-            className={`${styles.statusPill} ${filters.statuses.includes(KanbanStatus.DONE) ? styles.active : ''}`}
-            type="button"
-            aria-pressed={filters.statuses.includes(KanbanStatus.DONE)}
-          >
-            Done
-          </button>
+          {statuses.map((status) => (
+            <button
+              key={status.id}
+              onClick={() => handleStatusToggle(status.id)}
+              className={`${styles.statusPill} ${filters.statuses.includes(status.id) ? styles.active : ''}`}
+              type="button"
+              aria-pressed={filters.statuses.includes(status.id)}
+            >
+              {status.label}
+            </button>
+          ))}
         </div>
 
         {/* Category Filter - Multi-Select Pill Buttons */}

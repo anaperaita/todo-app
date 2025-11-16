@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TodoForm } from '../TodoForm';
 import { TodoFilters } from '../TodoFilters';
 import { TodoList } from '../TodoList';
@@ -14,6 +15,7 @@ import styles from './TodoApp.module.css';
  * Orchestrates all TODO operations, filtering, and statistics.
  */
 export const TodoApp: React.FC = () => {
+  const navigate = useNavigate();
   const {
     todos,
     filters,
@@ -91,8 +93,12 @@ export const TodoApp: React.FC = () => {
             </button>
           </div>
 
-          {/* Settings Icon (placeholder for now) */}
-          <button className={styles.settingsButton} aria-label="Settings">
+          {/* Settings Icon */}
+          <button
+            className={styles.settingsButton}
+            aria-label="Settings"
+            onClick={() => navigate('/admin')}
+          >
             ⚙️
           </button>
         </div>

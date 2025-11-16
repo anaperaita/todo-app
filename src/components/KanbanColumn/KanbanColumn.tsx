@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Todo, KanbanStatus, UpdateTodoInput } from '../../types';
+import { Todo, Status, UpdateTodoInput } from '../../types';
 import { KanbanCard } from '../KanbanCard/KanbanCard';
 import { useKanbanColumnViewModel } from './useKanbanColumnViewModel';
 import { useSortable } from '@dnd-kit/sortable';
@@ -9,7 +9,7 @@ import { CSS } from '@dnd-kit/utilities';
 import styles from './KanbanColumn.module.css';
 
 export interface KanbanColumnProps {
-  status: KanbanStatus;
+  status: Status;
   todos: Todo[];
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
@@ -23,7 +23,7 @@ const SortableCard: React.FC<{
   todo: Todo;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
-  onStatusChange: (id: string, newStatus: KanbanStatus) => void;
+  onStatusChange: (id: string, newStatus: string) => void;
 }> = ({ todo, onToggle, onDelete, onStatusChange }) => {
   const {
     attributes,
@@ -70,10 +70,10 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
   });
 
   const { setNodeRef, isOver } = useDroppable({
-    id: status,
+    id: status.id,
   });
 
-  const handleStatusChange = (id: string, newStatus: KanbanStatus) => {
+  const handleStatusChange = (id: string, newStatus: string) => {
     onUpdate(id, { status: newStatus });
   };
 
@@ -90,7 +90,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
       <div className={styles.header}>
         <div className={styles.headerContent}>
           <div className={`${styles.statusIndicator} ${styles[indicatorClass]}`} />
-          <h2 className={styles.title} id={`${status}-heading`}>
+          <h2 className={styles.title} id={`${status.id}-heading`}>
             {title}
           </h2>
         </div>
@@ -101,7 +101,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
 
       {/* Cards List */}
       <SortableContext items={todoIds} strategy={verticalListSortingStrategy}>
-        <div className={styles.cardsList} aria-labelledby={`${status}-heading`}>
+        <div className={styles.cardsList} aria-labelledby={`${status.id}-heading`}>
           {isEmpty ? (
             <div className={styles.emptyState}>
               <div className={styles.emptyIcon}>📭</div>

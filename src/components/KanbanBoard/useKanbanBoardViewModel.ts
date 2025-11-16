@@ -10,14 +10,11 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { Todo, TodoFilters, KanbanStatus, UpdateTodoInput } from '../../types';
+import { Todo, TodoFilters, UpdateTodoInput } from '../../types';
+import { useStatuses } from '../../context/StatusContext';
 
 interface KanbanBoardViewModel {
-  todosByStatus: {
-    [KanbanStatus.TODO]: Todo[];
-    [KanbanStatus.IN_PROGRESS]: Todo[];
-    [KanbanStatus.DONE]: Todo[];
-  };
+  todosByStatus: Record<string, Todo[]>;
   sensors: ReturnType<typeof useSensors>;
   activeId: string | null;
   handleDragStart: (event: DragStartEvent) => void;
@@ -42,6 +39,7 @@ export const useKanbanBoardViewModel = ({
   filters,
   onUpdate,
 }: UseKanbanBoardViewModelProps): KanbanBoardViewModel => {
+  const { statuses } = useStatuses();
   const [activeId, setActiveId] = useState<string | null>(null);
 
   // Configure sensors for drag and drop (mouse, touch, keyboard)
@@ -86,13 +84,15 @@ export const useKanbanBoardViewModel = ({
       });
     }
 
-    // Group by status
-    const grouped = {
-      [KanbanStatus.TODO]: [] as Todo[],
-      [KanbanStatus.IN_PROGRESS]: [] as Todo[],
-      [KanbanStatus.DONE]: [] as Todo[],
-    };
+    // Group by status dynamically
+    const grouped: Record<string, Todo[]> = {};
 
+    // Initialize groups for all available statuses
+    statuses.forEach((status) => {
+      grouped[status.id] = [];
+    });
+
+    // Assign todos to their status groups
     filteredTodos.forEach((todo) => {
       if (grouped[todo.status]) {
         grouped[todo.status].push(todo);
@@ -100,7 +100,7 @@ export const useKanbanBoardViewModel = ({
     });
 
     return grouped;
-  }, [todos, filters]);
+  }, [todos, filters, statuses]);
 
   // Find the currently dragged todo
   const activeTodo = useMemo(() => {
@@ -128,19 +128,16 @@ export const useKanbanBoardViewModel = ({
       const activeId = active.id as string;
       const overId = over.id as string;
 
-      // Check if dragged over a column (status)
-      if (
-        overId === KanbanStatus.TODO ||
-        overId === KanbanStatus.IN_PROGRESS ||
-        overId === KanbanStatus.DONE
-      ) {
+      // Check if dragged over a column (status ID)
+      const validStatusIds = statuses.map((s) => s.id);
+      if (validStatusIds.includes(overId)) {
         // Update todo status
-        onUpdate(activeId, { status: overId as KanbanStatus });
+        onUpdate(activeId, { status: overId });
       }
 
       setActiveId(null);
     },
-    [onUpdate]
+    [onUpdate, statuses]
   );
 
   const handleDragCancel = useCallback(() => {

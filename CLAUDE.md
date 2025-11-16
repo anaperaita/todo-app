@@ -2,6 +2,10 @@
 
 A React + TypeScript TODO list application following MVVM architecture with WCAG AA accessibility compliance.
 
+## Creating Plan Files
+
+If you need to create plan files for tasks or documentation, please create them in the `.claude/plans` directory.
+
 ## Repository Structure
 
 ```

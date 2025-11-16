@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Todo, UpdateTodoInput, Priority, KanbanStatus } from '../../types';
+import { Todo, UpdateTodoInput, Priority } from '../../types';
 import { formatDueDate } from '../../utils';
+import { useStatuses } from '../../context/StatusContext';
 import styles from './KanbanCard.module.css';
 
 export interface KanbanCardProps {
@@ -8,7 +9,7 @@ export interface KanbanCardProps {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onUpdate: (id: string, updates: UpdateTodoInput) => void;
-  onStatusChange: (id: string, newStatus: KanbanStatus) => void;
+  onStatusChange: (id: string, newStatus: string) => void;
   isDragging?: boolean;
 }
 
@@ -23,13 +24,16 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({
   onStatusChange,
   isDragging = false,
 }) => {
+  const { statuses, getStatusById } = useStatuses();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isStatusOpen, setIsStatusOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
 
-  const handleStatusClick = (newStatus: KanbanStatus) => {
-    onStatusChange(todo.id, newStatus);
+  const currentStatus = getStatusById(todo.status);
+
+  const handleStatusClick = (newStatusId: string) => {
+    onStatusChange(todo.id, newStatusId);
     setIsStatusOpen(false);
   };
 
@@ -44,19 +48,6 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({
   const handleDelete = () => {
     onDelete(todo.id);
     setIsMenuOpen(false);
-  };
-
-  const getStatusLabel = (status: KanbanStatus) => {
-    switch (status) {
-      case KanbanStatus.TODO:
-        return 'To Do';
-      case KanbanStatus.IN_PROGRESS:
-        return 'In Progress';
-      case KanbanStatus.DONE:
-        return 'Done';
-      default:
-        return status;
-    }
   };
 
   // Close menu when clicking outside
@@ -93,32 +84,21 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({
               aria-expanded={isStatusOpen}
               type="button"
             >
-              {getStatusLabel(todo.status)}
+              {currentStatus?.label || 'Unknown'}
             </button>
 
             {isStatusOpen && (
               <div className={styles.statusDropdown}>
-                <button
-                  onClick={() => handleStatusClick(KanbanStatus.TODO)}
-                  className={`${styles.statusOption} ${styles.status__TODO} ${todo.status === KanbanStatus.TODO ? styles.active : ''}`}
-                  type="button"
-                >
-                  To Do
-                </button>
-                <button
-                  onClick={() => handleStatusClick(KanbanStatus.IN_PROGRESS)}
-                  className={`${styles.statusOption} ${styles.status__IN_PROGRESS} ${todo.status === KanbanStatus.IN_PROGRESS ? styles.active : ''}`}
-                  type="button"
-                >
-                  In Progress
-                </button>
-                <button
-                  onClick={() => handleStatusClick(KanbanStatus.DONE)}
-                  className={`${styles.statusOption} ${styles.status__DONE} ${todo.status === KanbanStatus.DONE ? styles.active : ''}`}
-                  type="button"
-                >
-                  Done
-                </button>
+                {statuses.map((status) => (
+                  <button
+                    key={status.id}
+                    onClick={() => handleStatusClick(status.id)}
+                    className={`${styles.statusOption} ${styles[`status__${status.value}`]} ${todo.status === status.id ? styles.active : ''}`}
+                    type="button"
+                  >
+                    {status.label}
+                  </button>
+                ))}
               </div>
             )}
           </div>

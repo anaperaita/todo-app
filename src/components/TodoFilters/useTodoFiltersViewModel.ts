@@ -1,9 +1,9 @@
 import { useCallback, ChangeEvent } from 'react';
-import { TodoFilters, SortOption, KanbanStatus } from '../../types';
+import { TodoFilters, SortOption } from '../../types';
 
 interface TodoFiltersViewModel {
   handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleStatusToggle: (status: KanbanStatus) => void;
+  handleStatusToggle: (statusId: string) => void;
   handleCategoryToggle: (category: string) => void;
   handleSortChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
@@ -32,10 +32,10 @@ export const useTodoFiltersViewModel = ({
   );
 
   const handleStatusToggle = useCallback(
-    (status: KanbanStatus) => {
-      const newStatuses = filters.statuses.includes(status)
-        ? filters.statuses.filter((s) => s !== status)
-        : [...filters.statuses, status];
+    (statusId: string) => {
+      const newStatuses = filters.statuses.includes(statusId)
+        ? filters.statuses.filter((s) => s !== statusId)
+        : [...filters.statuses, statusId];
 
       onFilterChange({
         ...filters,

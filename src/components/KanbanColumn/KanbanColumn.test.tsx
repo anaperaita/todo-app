@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { KanbanColumn } from './KanbanColumn';
-import { KanbanStatus, Priority, Todo } from '../../types';
+import { renderWithStatus, MOCK_STATUSES, TEST_STATUS_IDS } from '../../test-utils/testHelpers';
+import { Priority, Todo } from '../../types';
 
 // Mock @dnd-kit components
 jest.mock('@dnd-kit/core', () => ({
@@ -29,7 +30,7 @@ describe('KanbanColumn', () => {
     id: '1',
     text: 'Test todo',
     completed: false,
-    status: KanbanStatus.TODO,
+    status: TEST_STATUS_IDS.TODO,
     priority: Priority.MEDIUM,
     category: 'Work',
     dueDate: '2025-12-31',
@@ -44,9 +45,9 @@ describe('KanbanColumn', () => {
 
   describe('Column Headers', () => {
     it('should display "To Do" for TODO status', () => {
-      render(
+      renderWithStatus(
         <KanbanColumn
-          status={KanbanStatus.TODO}
+          status={MOCK_STATUSES.TODO}
           todos={[]}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
@@ -58,9 +59,9 @@ describe('KanbanColumn', () => {
     });
 
     it('should display "In Progress" for IN_PROGRESS status', () => {
-      render(
+      renderWithStatus(
         <KanbanColumn
-          status={KanbanStatus.IN_PROGRESS}
+          status={MOCK_STATUSES.IN_PROGRESS}
           todos={[]}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
@@ -72,9 +73,9 @@ describe('KanbanColumn', () => {
     });
 
     it('should display "Done" for DONE status', () => {
-      render(
+      renderWithStatus(
         <KanbanColumn
-          status={KanbanStatus.DONE}
+          status={MOCK_STATUSES.DONE}
           todos={[]}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
@@ -88,9 +89,9 @@ describe('KanbanColumn', () => {
 
   describe('Todo Count', () => {
     it('should display 0 count when no todos', () => {
-      render(
+      renderWithStatus(
         <KanbanColumn
-          status={KanbanStatus.TODO}
+          status={MOCK_STATUSES.TODO}
           todos={[]}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
@@ -108,9 +109,9 @@ describe('KanbanColumn', () => {
         createMockTodo({ id: '3' }),
       ];
 
-      render(
+      renderWithStatus(
         <KanbanColumn
-          status={KanbanStatus.TODO}
+          status={MOCK_STATUSES.TODO}
           todos={todos}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
@@ -124,9 +125,9 @@ describe('KanbanColumn', () => {
 
   describe('Empty State', () => {
     it('should show empty state when no todos', () => {
-      render(
+      renderWithStatus(
         <KanbanColumn
-          status={KanbanStatus.TODO}
+          status={MOCK_STATUSES.TODO}
           todos={[]}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
@@ -140,9 +141,9 @@ describe('KanbanColumn', () => {
     it('should not show empty state when todos exist', () => {
       const todos = [createMockTodo()];
 
-      render(
+      renderWithStatus(
         <KanbanColumn
-          status={KanbanStatus.TODO}
+          status={MOCK_STATUSES.TODO}
           todos={todos}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
@@ -162,9 +163,9 @@ describe('KanbanColumn', () => {
         createMockTodo({ id: '3', text: 'Task 3' }),
       ];
 
-      render(
+      renderWithStatus(
         <KanbanColumn
-          status={KanbanStatus.TODO}
+          status={MOCK_STATUSES.TODO}
           todos={todos}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
@@ -180,9 +181,9 @@ describe('KanbanColumn', () => {
 
   describe('Accessibility', () => {
     it('should have proper ARIA labels', () => {
-      render(
+      renderWithStatus(
         <KanbanColumn
-          status={KanbanStatus.TODO}
+          status={MOCK_STATUSES.TODO}
           todos={[]}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
@@ -194,9 +195,9 @@ describe('KanbanColumn', () => {
     });
 
     it('should have heading with proper ID', () => {
-      render(
+      renderWithStatus(
         <KanbanColumn
-          status={KanbanStatus.TODO}
+          status={MOCK_STATUSES.TODO}
           todos={[]}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
@@ -205,7 +206,7 @@ describe('KanbanColumn', () => {
       );
 
       const heading = screen.getByRole('heading', { name: /to do/i });
-      expect(heading).toHaveAttribute('id', 'todo-heading');
+      expect(heading).toHaveAttribute('id', 'status-todo-heading');
     });
   });
 });

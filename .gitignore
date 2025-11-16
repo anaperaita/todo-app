@@ -19,6 +19,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+package-lock.json
 
 # IDE
 .vscode
@@ -26,3 +27,7 @@ yarn-error.log*
 *.swp
 *.swo
 *~
+
+# Claude
+.claude/plans
+
