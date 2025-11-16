@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTodoStorage } from '../../hooks';
-import { TodoFilters, SortOption, CreateTodoInput, UpdateTodoInput, KanbanStatus } from '../../types';
+import { TodoFilters, SortOption, CreateTodoInput, UpdateTodoInput } from '../../types';
+import { useStatuses } from '../../context/StatusContext';
 
 interface TodoAppViewModel {
   todos: ReturnType<typeof useTodoStorage>['todos'];
@@ -17,14 +18,28 @@ interface TodoAppViewModel {
  * Orchestrates all TODO operations and filter state.
  */
 export const useTodoAppViewModel = (): TodoAppViewModel => {
-  const { todos, addTodo, toggleTodo, deleteTodo, updateTodo } = useTodoStorage();
+  const { statuses, statusExists, getFirstStatus } = useStatuses();
+  const { todos, addTodo, toggleTodo, deleteTodo, updateTodo } = useTodoStorage({
+    defaultStatusId: getFirstStatus()?.id,
+    validateStatus: statusExists,
+  });
 
   const [filters, setFilters] = useState<TodoFilters>({
-    statuses: [KanbanStatus.TODO, KanbanStatus.IN_PROGRESS, KanbanStatus.DONE],  // All statuses selected by default
+    statuses: [],  // Will be initialized with all available statuses
     categories: [],  // Empty array = show all categories
     searchText: '',
     sortBy: SortOption.DATE_ADDED_DESC,  // Newest first by default
   });
+
+  // Initialize filters with all available statuses
+  useEffect(() => {
+    if (statuses.length > 0 && filters.statuses.length === 0) {
+      setFilters((prev) => ({
+        ...prev,
+        statuses: statuses.map((s) => s.id),
+      }));
+    }
+  }, [statuses, filters.statuses.length]);
 
   const handleAddTodo = useCallback(
     (todo: CreateTodoInput) => {

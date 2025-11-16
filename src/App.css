@@ -1,5 +1,21 @@
 /* Global CSS Reset and Base Styles */
 
+:root {
+  /* Status color palette */
+  --color-success-green: #10b981;
+  --color-in-progress-blue: #3b82f6;
+  --color-warning-yellow: #f59e0b;
+  --color-error-red: #ef4444;
+  --color-blocked-red: #dc2626;
+  --color-review-purple: #8b5cf6;
+  --color-testing-orange: #f97316;
+  --color-done-gray: #6b7280;
+  --color-pending-amber: #fbbf24;
+  --color-urgent-pink: #ec4899;
+  --color-info-cyan: #06b6d4;
+  --color-archive-slate: #64748b;
+}
+
 * {
   margin: 0;
   padding: 0;

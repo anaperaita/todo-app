@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Todo, UpdateTodoInput, Priority, KanbanStatus } from '../../types';
+import { Todo, UpdateTodoInput, Priority } from '../../types';
 import { useTodoItemViewModel } from './useTodoItemViewModel';
 import { formatDueDate } from '../../utils';
+import { useStatuses } from '../../context/StatusContext';
 import styles from './TodoItem.module.css';
 
 export interface TodoItemProps {
@@ -15,6 +16,7 @@ export interface TodoItemProps {
  * Individual TODO item component with inline editing, completion toggle, and delete functionality.
  */
 export const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, onUpdate }) => {
+  const { statuses, getStatusById } = useStatuses();
   const {
     isEditing,
     editText,
@@ -37,9 +39,11 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, on
   const inputRef = useRef<HTMLInputElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
 
-  const handleStatusClick = (status: KanbanStatus) => {
+  const currentStatus = getStatusById(todo.status);
+
+  const handleStatusClick = (statusId: string) => {
     const event = {
-      target: { value: status }
+      target: { value: statusId }
     } as React.ChangeEvent<HTMLSelectElement>;
     handleStatusChange(event);
     setIsStatusOpen(false);
@@ -49,18 +53,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, on
     setIsStatusOpen((prev) => !prev);
   };
 
-  const getStatusLabel = (status: KanbanStatus) => {
-    switch (status) {
-      case KanbanStatus.TODO:
-        return 'To Do';
-      case KanbanStatus.IN_PROGRESS:
-        return 'In Progress';
-      case KanbanStatus.DONE:
-        return 'Done';
-      default:
-        return status;
-    }
-  };
 
   // Focus input when entering edit mode
   useEffect(() => {
@@ -153,32 +145,21 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, on
             aria-expanded={isStatusOpen}
             type="button"
           >
-            {getStatusLabel(todo.status)}
+            {currentStatus?.label || 'Unknown'}
           </button>
 
           {isStatusOpen && (
             <div className={styles.statusDropdown}>
-              <button
-                onClick={() => handleStatusClick(KanbanStatus.TODO)}
-                className={`${styles.statusOption} ${styles.status__TODO} ${todo.status === KanbanStatus.TODO ? styles.active : ''}`}
-                type="button"
-              >
-                To Do
-              </button>
-              <button
-                onClick={() => handleStatusClick(KanbanStatus.IN_PROGRESS)}
-                className={`${styles.statusOption} ${styles.status__IN_PROGRESS} ${todo.status === KanbanStatus.IN_PROGRESS ? styles.active : ''}`}
-                type="button"
-              >
-                In Progress
-              </button>
-              <button
-                onClick={() => handleStatusClick(KanbanStatus.DONE)}
-                className={`${styles.statusOption} ${styles.status__DONE} ${todo.status === KanbanStatus.DONE ? styles.active : ''}`}
-                type="button"
-              >
-                Done
-              </button>
+              {statuses.map((status) => (
+                <button
+                  key={status.id}
+                  onClick={() => handleStatusClick(status.id)}
+                  className={`${styles.statusOption} ${styles[`status__${status.value}`]} ${todo.status === status.id ? styles.active : ''}`}
+                  type="button"
+                >
+                  {status.label}
+                </button>
+              ))}
             </div>
           )}
         </div>

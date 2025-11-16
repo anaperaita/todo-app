@@ -1,0 +1,143 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.headerTop {
+  margin-bottom: 1rem;
+}
+
+.backButton {
+  padding: 0.5rem 1rem;
+  background: white;
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.backButton:hover {
+  background: #eff6ff;
+}
+
+.header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+}
+
+.description {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: 2rem;
+}
+
+.statusListSection,
+.formSection {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sectionHeader h2 {
+  font-size: 1.25rem;
+  color: #1f2937;
+  margin: 0;
+}
+
+.addButton {
+  padding: 0.5rem 1rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.addButton:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.addButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.statusList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.statusItem {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.statusItem:hover {
+  background: #f9fafb;
+  border-color: #3b82f6;
+}
+
+.statusItem.selected {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  border-width: 2px;
+}
+
+.statusInfo {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.colorIndicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.statusLabel {
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+}
+
+.statusDescription {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.formSection h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}

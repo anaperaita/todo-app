@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { KanbanStatus } from '../../types';
+import { Status } from '../../types';
 
 interface KanbanColumnViewModel {
   title: string;
@@ -10,7 +10,7 @@ interface KanbanColumnViewModel {
 }
 
 interface UseKanbanColumnViewModelProps {
-  status: KanbanStatus;
+  status: Status;
   todoCount: number;
 }
 
@@ -23,42 +23,15 @@ export const useKanbanColumnViewModel = ({
   todoCount,
 }: UseKanbanColumnViewModelProps): KanbanColumnViewModel => {
   const title = useMemo(() => {
-    switch (status) {
-      case KanbanStatus.TODO:
-        return 'To Do';
-      case KanbanStatus.IN_PROGRESS:
-        return 'In Progress';
-      case KanbanStatus.DONE:
-        return 'Done';
-      default:
-        return 'Unknown';
-    }
+    return status.label;
   }, [status]);
 
   const statusClass = useMemo(() => {
-    switch (status) {
-      case KanbanStatus.TODO:
-        return 'status__todo';
-      case KanbanStatus.IN_PROGRESS:
-        return 'status__inProgress';
-      case KanbanStatus.DONE:
-        return 'status__done';
-      default:
-        return '';
-    }
+    return `status__${status.value}`;
   }, [status]);
 
   const indicatorClass = useMemo(() => {
-    switch (status) {
-      case KanbanStatus.TODO:
-        return 'todo';
-      case KanbanStatus.IN_PROGRESS:
-        return 'inProgress';
-      case KanbanStatus.DONE:
-        return 'done';
-      default:
-        return '';
-    }
+    return status.value;
   }, [status]);
 
   const count = todoCount;

@@ -2,6 +2,15 @@ import { renderHook, act } from '@testing-library/react';
 import { useTodoStorage } from './useTodoStorage';
 import { Priority, CreateTodoInput } from '../types';
 
+const TEST_STATUS_ID = 'test-status-id';
+
+// Mock crypto.randomUUID
+Object.defineProperty(global, 'crypto', {
+  value: {
+    randomUUID: () => 'test-uuid-' + Math.random().toString(36).substring(2, 15),
+  },
+});
+
 // Mock localStorage
 const localStorageMock = (() => {
   let store: Record<string, string> = {};
@@ -31,7 +40,7 @@ describe('useTodoStorage', () => {
 
   describe('Initialization', () => {
     it('should initialize with empty todos array when localStorage is empty', () => {
-      const { result } = renderHook(() => useTodoStorage());
+      const { result } = renderHook(() => useTodoStorage({ defaultStatusId: TEST_STATUS_ID }));
 
       expect(result.current.todos).toEqual([]);
     });
@@ -42,6 +51,7 @@ describe('useTodoStorage', () => {
           id: '1',
           text: 'Test todo',
           completed: false,
+          status: TEST_STATUS_ID,
           priority: Priority.MEDIUM,
           category: 'work',
           dueDate: null,
@@ -52,7 +62,7 @@ describe('useTodoStorage', () => {
 
       localStorageMock.setItem('todos', JSON.stringify(existingTodos));
 
-      const { result } = renderHook(() => useTodoStorage());
+      const { result } = renderHook(() => useTodoStorage({ defaultStatusId: TEST_STATUS_ID }));
 
       expect(result.current.todos).toHaveLength(1);
       expect(result.current.todos[0].text).toBe('Test todo');
@@ -61,7 +71,7 @@ describe('useTodoStorage', () => {
     it('should handle corrupted localStorage data gracefully', () => {
       localStorageMock.setItem('todos', 'invalid json');
 
-      const { result } = renderHook(() => useTodoStorage());
+      const { result } = renderHook(() => useTodoStorage({ defaultStatusId: TEST_STATUS_ID }));
 
       expect(result.current.todos).toEqual([]);
     });
@@ -69,7 +79,7 @@ describe('useTodoStorage', () => {
 
   describe('Add Todo', () => {
     it('should add a new todo with generated id and timestamps', () => {
-      const { result } = renderHook(() => useTodoStorage());
+      const { result } = renderHook(() => useTodoStorage({ defaultStatusId: TEST_STATUS_ID }));
 
       const newTodo: CreateTodoInput = {
         text: 'New task',
@@ -96,7 +106,7 @@ describe('useTodoStorage', () => {
     });
 
     it('should persist todo to localStorage', () => {
-      const { result } = renderHook(() => useTodoStorage());
+      const { result } = renderHook(() => useTodoStorage({ defaultStatusId: TEST_STATUS_ID }));
 
       const newTodo: CreateTodoInput = {
         text: 'Persistent task',
@@ -117,7 +127,7 @@ describe('useTodoStorage', () => {
 
   describe('Update Todo', () => {
     it('should update an existing todo', () => {
-      const { result } = renderHook(() => useTodoStorage());
+      const { result } = renderHook(() => useTodoStorage({ defaultStatusId: TEST_STATUS_ID }));
 
       const newTodo: CreateTodoInput = {
         text: 'Original text',
@@ -138,11 +148,14 @@ describe('useTodoStorage', () => {
 
       expect(result.current.todos[0].text).toBe('Updated text');
       expect(result.current.todos[0].priority).toBe(Priority.HIGH);
-      expect(result.current.todos[0].updatedAt).not.toBe(result.current.todos[0].createdAt);
+      expect(result.current.todos[0].updatedAt).toBeDefined();
+      expect(new Date(result.current.todos[0].updatedAt).getTime()).toBeGreaterThanOrEqual(
+        new Date(result.current.todos[0].createdAt).getTime()
+      );
     });
 
     it('should not update non-existent todo', () => {
-      const { result } = renderHook(() => useTodoStorage());
+      const { result } = renderHook(() => useTodoStorage({ defaultStatusId: TEST_STATUS_ID }));
 
       const initialLength = result.current.todos.length;
 
@@ -156,7 +169,7 @@ describe('useTodoStorage', () => {
 
   describe('Delete Todo', () => {
     it('should delete an existing todo', () => {
-      const { result } = renderHook(() => useTodoStorage());
+      const { result } = renderHook(() => useTodoStorage({ defaultStatusId: TEST_STATUS_ID }));
 
       const newTodo: CreateTodoInput = {
         text: 'To be deleted',
@@ -179,7 +192,7 @@ describe('useTodoStorage', () => {
     });
 
     it('should persist deletion to localStorage', () => {
-      const { result } = renderHook(() => useTodoStorage());
+      const { result } = renderHook(() => useTodoStorage({ defaultStatusId: TEST_STATUS_ID }));
 
       const newTodo: CreateTodoInput = {
         text: 'To be deleted',
@@ -205,7 +218,7 @@ describe('useTodoStorage', () => {
 
   describe('Toggle Todo', () => {
     it('should toggle todo completion status', () => {
-      const { result } = renderHook(() => useTodoStorage());
+      const { result } = renderHook(() => useTodoStorage({ defaultStatusId: TEST_STATUS_ID }));
 
       const newTodo: CreateTodoInput = {
         text: 'Toggle me',

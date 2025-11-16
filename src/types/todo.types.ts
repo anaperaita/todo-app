@@ -17,11 +17,37 @@ export enum SortOption {
   ALPHABETICAL = 'alphabetical',
 }
 
-export enum KanbanStatus {
-  TODO = 'todo',
-  IN_PROGRESS = 'inProgress',
-  DONE = 'done',
+/**
+ * Status configuration interface for dynamic status management
+ */
+export interface Status {
+  id: string;
+  label: string;              // Display name (e.g., "To Do", "In Progress")
+  value: string;              // Unique identifier (e.g., "todo", "in-progress")
+  color: string;              // Color ID from palette
+  colorName: string;          // Semantic color name (e.g., "Success Green")
+  description: string;        // Optional description of when to use this status
+  position: number;           // Order in Kanban board and filters
+  createdAt: string;          // ISO 8601 date string
+  updatedAt: string;          // ISO 8601 date string
 }
+
+/**
+ * Input type for creating a new status
+ */
+export type CreateStatusInput = Omit<Status, 'id' | 'createdAt' | 'updatedAt'>;
+
+/**
+ * Input type for updating an existing status
+ */
+export type UpdateStatusInput = Partial<Omit<Status, 'id' | 'createdAt'>>;
+
+/**
+ * Constants for status validation
+ */
+export const MAX_STATUSES = 7;
+export const MIN_STATUS_LABEL_LENGTH = 3;
+export const MAX_STATUS_LABEL_LENGTH = 30;
 
 export enum ViewMode {
   LIST = 'list',
@@ -32,7 +58,7 @@ export interface Todo {
   id: string;
   text: string;
   completed: boolean;
-  status: KanbanStatus; // For kanban board positioning
+  status: string; // Status ID referencing Status.id
   priority: Priority;
   category: string;
   dueDate: string | null; // ISO 8601 date string
@@ -41,7 +67,7 @@ export interface Todo {
 }
 
 export interface TodoFilters {
-  statuses: KanbanStatus[];  // Multi-select: filter by selected statuses
+  statuses: string[];  // Multi-select: filter by selected status IDs
   categories: string[];       // Multi-select: filter by selected categories
   searchText: string;
   sortBy: SortOption;
@@ -54,6 +80,6 @@ export interface TodoStats {
 }
 
 export type CreateTodoInput = Omit<Todo, 'id' | 'completed' | 'createdAt' | 'updatedAt' | 'status'> & {
-  status?: KanbanStatus;
+  status?: string;
 };
 export type UpdateTodoInput = Partial<Omit<Todo, 'id' | 'createdAt'>>;
