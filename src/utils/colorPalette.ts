@@ -12,92 +12,92 @@ export interface ColorConfig {
 }
 
 /**
- * Status-oriented color palette with semantic names
- * 12 colors covering common workflow states
+ * Status color palette with warm, earthy tones
+ * 12 distinct colors from the warm palette for maximum visual differentiation
  */
 export const STATUS_COLOR_PALETTE: ColorConfig[] = [
   {
-    id: 'success-green',
-    name: 'Success Green',
-    cssClass: 'status-color-success-green',
-    hexValue: '#10b981',
+    id: 'color-1',
+    name: 'Terracotta',
+    cssClass: 'status-color-1',
+    hexValue: '#d4764f',
     textColor: '#ffffff',
   },
   {
-    id: 'in-progress-blue',
-    name: 'In Progress Blue',
-    cssClass: 'status-color-in-progress-blue',
-    hexValue: '#3b82f6',
+    id: 'color-2',
+    name: 'Sage',
+    cssClass: 'status-color-2',
+    hexValue: '#8a9a7b',
     textColor: '#ffffff',
   },
   {
-    id: 'blocked-red',
-    name: 'Blocked Red',
-    cssClass: 'status-color-blocked-red',
-    hexValue: '#ef4444',
+    id: 'color-3',
+    name: 'Golden Sand',
+    cssClass: 'status-color-3',
+    hexValue: '#e8c68f',
+    textColor: '#2d2520',
+  },
+  {
+    id: 'color-4',
+    name: 'Deep Earth',
+    cssClass: 'status-color-4',
+    hexValue: '#4a3f35',
     textColor: '#ffffff',
   },
   {
-    id: 'warning-yellow',
-    name: 'Warning Yellow',
-    cssClass: 'status-color-warning-yellow',
-    hexValue: '#f59e0b',
-    textColor: '#000000',
-  },
-  {
-    id: 'review-orange',
-    name: 'Review Orange',
-    cssClass: 'status-color-review-orange',
-    hexValue: '#f97316',
+    id: 'color-5',
+    name: 'Rust',
+    cssClass: 'status-color-5',
+    hexValue: '#b85d38',
     textColor: '#ffffff',
   },
   {
-    id: 'waiting-purple',
-    name: 'Waiting Purple',
-    cssClass: 'status-color-waiting-purple',
-    hexValue: '#a855f7',
+    id: 'color-6',
+    name: 'Olive',
+    cssClass: 'status-color-6',
+    hexValue: '#6b7a5d',
     textColor: '#ffffff',
   },
   {
-    id: 'pending-indigo',
-    name: 'Pending Indigo',
-    cssClass: 'status-color-pending-indigo',
-    hexValue: '#6366f1',
+    id: 'color-7',
+    name: 'Warm Amber',
+    cssClass: 'status-color-7',
+    hexValue: '#d89b5a',
+    textColor: '#2d2520',
+  },
+  {
+    id: 'color-8',
+    name: 'Forest Moss',
+    cssClass: 'status-color-8',
+    hexValue: '#4d5c3e',
     textColor: '#ffffff',
   },
   {
-    id: 'testing-teal',
-    name: 'Testing Teal',
-    cssClass: 'status-color-testing-teal',
-    hexValue: '#14b8a6',
+    id: 'color-9',
+    name: 'Clay',
+    cssClass: 'status-color-9',
+    hexValue: '#a67c52',
     textColor: '#ffffff',
   },
   {
-    id: 'approved-emerald',
-    name: 'Approved Emerald',
-    cssClass: 'status-color-approved-emerald',
-    hexValue: '#059669',
+    id: 'color-10',
+    name: 'Stone',
+    cssClass: 'status-color-10',
+    hexValue: '#7a7165',
     textColor: '#ffffff',
   },
   {
-    id: 'neutral-gray',
-    name: 'Neutral Gray',
-    cssClass: 'status-color-neutral-gray',
-    hexValue: '#6b7280',
-    textColor: '#ffffff',
+    id: 'color-11',
+    name: 'Soft Cream',
+    cssClass: 'status-color-11',
+    hexValue: '#c9b896',
+    textColor: '#2d2520',
   },
   {
-    id: 'urgent-pink',
-    name: 'Urgent Pink',
-    cssClass: 'status-color-urgent-pink',
-    hexValue: '#ec4899',
-    textColor: '#ffffff',
-  },
-  {
-    id: 'archived-slate',
-    name: 'Archived Slate',
-    cssClass: 'status-color-archived-slate',
-    hexValue: '#475569',
+    id: 'color-12',
+    name: 'Warm Brown',
+    cssClass: 'status-color-12',
+    hexValue: '#6b5444',
     textColor: '#ffffff',
   },
 ];
@@ -112,9 +112,9 @@ export function getColorById(colorId: string): ColorConfig | undefined {
 }
 
 /**
- * Get default color (In Progress Blue)
+ * Get default color (Terracotta)
  * @returns Default ColorConfig
  */
 export function getDefaultColor(): ColorConfig {
-  return STATUS_COLOR_PALETTE[1]; // In Progress Blue
+  return STATUS_COLOR_PALETTE[0]; // Terracotta
 }

@@ -78,18 +78,7 @@
   height: 12px;
   border-radius: 50%;
   flex-shrink: 0;
-}
-
-.statusIndicator.todo {
-  background: var(--color-sage);
-}
-
-.statusIndicator.inProgress {
-  background: #e8b55d;
-}
-
-.statusIndicator.done {
-  background: var(--color-terracotta);
+  /* Color applied via inline styles */
 }
 
 .cardsList {

@@ -64,7 +64,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
   onDelete,
   onUpdate,
 }) => {
-  const { title, count, isEmpty, statusClass, indicatorClass } = useKanbanColumnViewModel({
+  const { title, count, isEmpty, statusClass } = useKanbanColumnViewModel({
     status,
     todoCount: todos.length,
   });
@@ -89,7 +89,10 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
       {/* Column Header */}
       <div className={styles.header}>
         <div className={styles.headerContent}>
-          <div className={`${styles.statusIndicator} ${styles[indicatorClass]}`} />
+          <div
+            className={styles.statusIndicator}
+            style={{ backgroundColor: `var(--color-${status.color})` }}
+          />
           <h2 className={styles.title} id={`${status.id}-heading`}>
             {title}
           </h2>

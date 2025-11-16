@@ -15,18 +15,7 @@
   box-shadow: 0 2px 6px rgba(75, 63, 53, 0.12);
 }
 
-/* Priority indicators */
-.priority__low {
-  border-left-color: var(--color-sage);
-}
-
-.priority__medium {
-  border-left-color: var(--color-terracotta);
-}
-
-.priority__high {
-  border-left-color: #c44536;
-}
+/* Status colors are applied via inline styles */
 
 .mainContent {
   display: flex;

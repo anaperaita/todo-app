@@ -1,19 +1,19 @@
 /* Global CSS Reset and Base Styles */
 
 :root {
-  /* Status color palette */
-  --color-success-green: #10b981;
-  --color-in-progress-blue: #3b82f6;
-  --color-warning-yellow: #f59e0b;
-  --color-error-red: #ef4444;
-  --color-blocked-red: #dc2626;
-  --color-review-purple: #8b5cf6;
-  --color-testing-orange: #f97316;
-  --color-done-gray: #6b7280;
-  --color-pending-amber: #fbbf24;
-  --color-urgent-pink: #ec4899;
-  --color-info-cyan: #06b6d4;
-  --color-archive-slate: #64748b;
+  /* Status color palette - warm, earthy tones with high contrast */
+  --color-color-1: #d4764f;
+  --color-color-2: #8a9a7b;
+  --color-color-3: #e8c68f;
+  --color-color-4: #4a3f35;
+  --color-color-5: #b85d38;
+  --color-color-6: #6b7a5d;
+  --color-color-7: #d89b5a;
+  --color-color-8: #4d5c3e;
+  --color-color-9: #a67c52;
+  --color-color-10: #7a7165;
+  --color-color-11: #c9b896;
+  --color-color-12: #6b5444;
 }
 
 * {

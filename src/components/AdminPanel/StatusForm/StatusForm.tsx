@@ -13,9 +13,11 @@ export interface StatusFormProps {
   statusId: string | null; // null for create, id for edit
   onSave: (input: CreateStatusInput | UpdateStatusInput) => void;
   onCancel: () => void;
+  onDelete?: (statusId: string) => void;
+  canDelete?: boolean;
 }
 
-export function StatusForm({ statusId, onSave, onCancel }: StatusFormProps): JSX.Element {
+export function StatusForm({ statusId, onSave, onCancel, onDelete, canDelete }: StatusFormProps): JSX.Element {
   const { statuses, getStatusById } = useStatuses();
   const existingStatus = statusId ? getStatusById(statusId) : null;
   const isEditing = statusId !== null;
@@ -89,8 +91,12 @@ export function StatusForm({ statusId, onSave, onCancel }: StatusFormProps): JSX
     const colorConfig = STATUS_COLOR_PALETTE.find(c => c.id === colorId);
     if (!colorConfig) return;
 
+    // Generate value from label (lowercase, replace spaces with dashes)
+    const value = label.trim().toLowerCase().replace(/\s+/g, '-');
+
     const input = {
       label: label.trim(),
+      value,
       description: description.trim(),
       color: colorId,
       colorName: colorConfig.name,
@@ -98,6 +104,19 @@ export function StatusForm({ statusId, onSave, onCancel }: StatusFormProps): JSX
     };
 
     onSave(input);
+  };
+
+  // Handle delete
+  const handleDelete = () => {
+    if (!statusId || !onDelete) return;
+
+    const confirmed = window.confirm(
+      `Are you sure you want to delete the status "${existingStatus?.label}"? This action cannot be undone.`
+    );
+
+    if (confirmed) {
+      onDelete(statusId);
+    }
   };
 
   return (
@@ -167,6 +186,12 @@ export function StatusForm({ statusId, onSave, onCancel }: StatusFormProps): JSX
 
       {/* Action buttons */}
       <div className={styles.actions}>
+        {isEditing && canDelete && onDelete && (
+          <button type="button" onClick={handleDelete} className={styles.deleteButton}>
+            Delete
+          </button>
+        )}
+        <div className={styles.actionsSpacer} />
         <button type="button" onClick={onCancel} className={styles.cancelButton}>
           Cancel
         </button>
