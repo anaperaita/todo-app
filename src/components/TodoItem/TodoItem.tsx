@@ -79,9 +79,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, on
   }, [isStatusOpen]);
 
   if (isEditing) {
-    const priorityClass = `priority__${todo.priority}`;
+    const statusColor = currentStatus?.color || 'color-1';
     return (
-      <div className={`${styles.todoItem} ${styles[priorityClass]}`}>
+      <div className={styles.todoItem} style={{ borderLeftColor: `var(--color-${statusColor})` }}>
         <div className={styles.editMode}>
           <input
             ref={inputRef}
@@ -132,9 +132,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, on
     );
   }
 
-  const priorityClass = `priority__${todo.priority}`;
+  const statusColor = currentStatus?.color || 'color-1';
   return (
-    <div className={`${styles.todoItem} ${styles[priorityClass]}`}>
+    <div className={styles.todoItem} style={{ borderLeftColor: `var(--color-${statusColor})` }}>
       <div className={styles.mainContent}>
         {/* Custom Status Dropdown */}
         <div className={styles.statusContainer} ref={statusRef}>

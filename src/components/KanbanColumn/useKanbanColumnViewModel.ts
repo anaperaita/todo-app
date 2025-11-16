@@ -6,7 +6,6 @@ interface KanbanColumnViewModel {
   count: number;
   isEmpty: boolean;
   statusClass: string;
-  indicatorClass: string;
 }
 
 interface UseKanbanColumnViewModelProps {
@@ -30,10 +29,6 @@ export const useKanbanColumnViewModel = ({
     return `status__${status.value}`;
   }, [status]);
 
-  const indicatorClass = useMemo(() => {
-    return status.value;
-  }, [status]);
-
   const count = todoCount;
   const isEmpty = todoCount === 0;
 
@@ -42,6 +37,5 @@ export const useKanbanColumnViewModel = ({
     count,
     isEmpty,
     statusClass,
-    indicatorClass,
   };
 };
