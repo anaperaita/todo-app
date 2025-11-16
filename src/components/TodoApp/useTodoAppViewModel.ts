@@ -27,6 +27,7 @@ export const useTodoAppViewModel = (): TodoAppViewModel => {
   const [filters, setFilters] = useState<TodoFilters>({
     statuses: [],  // Will be initialized with all available statuses
     categories: [],  // Empty array = show all categories
+    priorities: [],  // Empty array = show all priorities
     searchText: '',
     sortBy: SortOption.DATE_ADDED_DESC,  // Newest first by default
   });
