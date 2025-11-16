@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useTodoStorage } from '../../hooks';
-import { TodoFilters, SortOption, CreateTodoInput, UpdateTodoInput } from '../../types';
+import { TodoFilters, SortOption, CreateTodoInput, UpdateTodoInput, Priority } from '../../types';
 import { useStatuses } from '../../context/StatusContext';
 
 interface TodoAppViewModel {
@@ -11,6 +11,10 @@ interface TodoAppViewModel {
   handleDeleteTodo: (id: string) => void;
   handleUpdateTodo: (id: string, updates: UpdateTodoInput) => void;
   handleFilterChange: (newFilters: TodoFilters) => void;
+  handleRemoveStatusFilter: (statusId: string) => void;
+  handleRemoveCategoryFilter: (category: string) => void;
+  handleRemovePriorityFilter: (priority: Priority) => void;
+  handleClearSearch: () => void;
 }
 
 /**
@@ -18,29 +22,19 @@ interface TodoAppViewModel {
  * Orchestrates all TODO operations and filter state.
  */
 export const useTodoAppViewModel = (): TodoAppViewModel => {
-  const { statuses, statusExists, getFirstStatus } = useStatuses();
+  const { statusExists, getFirstStatus } = useStatuses();
   const { todos, addTodo, toggleTodo, deleteTodo, updateTodo } = useTodoStorage({
     defaultStatusId: getFirstStatus()?.id,
     validateStatus: statusExists,
   });
 
   const [filters, setFilters] = useState<TodoFilters>({
-    statuses: [],  // Will be initialized with all available statuses
-    categories: [],  // Empty array = show all categories
-    priorities: [],  // Empty array = show all priorities
+    statuses: [],  // Empty = show all todos
+    categories: [],  // Empty = show all categories
+    priorities: [],  // Empty = show all priorities
     searchText: '',
-    sortBy: SortOption.DATE_ADDED_DESC,  // Newest first by default
+    sortBy: SortOption.DATE_ADDED,  // Oldest first by default
   });
-
-  // Initialize filters with all available statuses
-  useEffect(() => {
-    if (statuses.length > 0 && filters.statuses.length === 0) {
-      setFilters((prev) => ({
-        ...prev,
-        statuses: statuses.map((s) => s.id),
-      }));
-    }
-  }, [statuses, filters.statuses.length]);
 
   const handleAddTodo = useCallback(
     (todo: CreateTodoInput) => {
@@ -74,6 +68,34 @@ export const useTodoAppViewModel = (): TodoAppViewModel => {
     setFilters(newFilters);
   }, []);
 
+  const handleRemoveStatusFilter = useCallback((statusId: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      statuses: prev.statuses.filter((id) => id !== statusId),
+    }));
+  }, []);
+
+  const handleRemoveCategoryFilter = useCallback((category: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      categories: prev.categories.filter((c) => c !== category),
+    }));
+  }, []);
+
+  const handleRemovePriorityFilter = useCallback((priority: Priority) => {
+    setFilters((prev) => ({
+      ...prev,
+      priorities: prev.priorities.filter((p) => p !== priority),
+    }));
+  }, []);
+
+  const handleClearSearch = useCallback(() => {
+    setFilters((prev) => ({
+      ...prev,
+      searchText: '',
+    }));
+  }, []);
+
   return {
     todos,
     filters,
@@ -82,5 +104,9 @@ export const useTodoAppViewModel = (): TodoAppViewModel => {
     handleDeleteTodo,
     handleUpdateTodo,
     handleFilterChange,
+    handleRemoveStatusFilter,
+    handleRemoveCategoryFilter,
+    handleRemovePriorityFilter,
+    handleClearSearch,
   };
 };

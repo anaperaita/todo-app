@@ -38,6 +38,13 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
     activeTodo,
   } = useKanbanBoardViewModel({ todos, filters, onUpdate });
 
+  // Filter visible columns based on status filter
+  // If filters.statuses is empty, show all columns
+  // If filters.statuses has items, only show those columns
+  const visibleStatuses = filters.statuses.length > 0
+    ? statuses.filter(status => filters.statuses.includes(status.id))
+    : statuses;
+
   const totalTodos = todos.length;
   const hasNoTodos = totalTodos === 0;
 
@@ -103,7 +110,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
       >
         {/* Dynamic Columns based on available statuses */}
         <div className={styles.columnsContainer}>
-          {statuses.map((status) => (
+          {visibleStatuses.map((status) => (
             <KanbanColumn
               key={status.id}
               status={status}
