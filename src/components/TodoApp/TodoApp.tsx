@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TodoForm } from '../TodoForm';
 import { TodoFilters } from '../TodoFilters';
 import { TodoList } from '../TodoList';
 import { KanbanBoard } from '../KanbanBoard';
 import { SlideInPanel } from '../SlideInPanel';
+import { ActiveFilterSummary } from '../ActiveFilterSummary';
 import { useTodoAppViewModel } from './useTodoAppViewModel';
 import { useTodoStatsViewModel } from '../TodoStats/useTodoStatsViewModel';
+import { useStatuses } from '../../context/StatusContext';
 import { ViewMode, CreateTodoInput } from '../../types';
 import styles from './TodoApp.module.css';
 
@@ -16,6 +18,7 @@ import styles from './TodoApp.module.css';
  */
 export const TodoApp: React.FC = () => {
   const navigate = useNavigate();
+  const { statuses } = useStatuses();
   const {
     todos,
     filters,
@@ -24,7 +27,18 @@ export const TodoApp: React.FC = () => {
     handleDeleteTodo,
     handleUpdateTodo,
     handleFilterChange,
+    handleRemoveStatusFilter,
+    handleRemoveCategoryFilter,
+    handleRemovePriorityFilter,
+    handleClearSearch,
   } = useTodoAppViewModel();
+
+  // Create status label map for ActiveFilterSummary
+  const statusLabels = useMemo(() => {
+    const map = new Map<string, string>();
+    statuses.forEach(status => map.set(status.id, status.label));
+    return map;
+  }, [statuses]);
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.LIST);
@@ -134,6 +148,16 @@ export const TodoApp: React.FC = () => {
 
         {/* Main Content Area */}
         <main className={styles.main} role="main">
+          {/* Active Filter Summary */}
+          <ActiveFilterSummary
+            filters={filters}
+            onRemoveStatus={handleRemoveStatusFilter}
+            onRemoveCategory={handleRemoveCategoryFilter}
+            onRemovePriority={handleRemovePriorityFilter}
+            onClearSearch={handleClearSearch}
+            statusLabels={statusLabels}
+          />
+
           {viewMode === ViewMode.LIST ? (
             <TodoList
               todos={todos}

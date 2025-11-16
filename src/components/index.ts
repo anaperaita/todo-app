@@ -8,3 +8,6 @@ export * from './SlideInPanel';
 export * from './KanbanBoard';
 export * from './KanbanColumn';
 export * from './KanbanCard';
+export * from './FilterTabs';
+export * from './CheckboxList';
+export * from './ActiveFilterSummary';

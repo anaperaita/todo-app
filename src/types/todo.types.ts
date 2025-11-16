@@ -69,6 +69,7 @@ export interface Todo {
 export interface TodoFilters {
   statuses: string[];  // Multi-select: filter by selected status IDs
   categories: string[];       // Multi-select: filter by selected categories
+  priorities: Priority[];     // Multi-select: filter by selected priorities
   searchText: string;
   sortBy: SortOption;
 }

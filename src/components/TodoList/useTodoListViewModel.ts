@@ -37,6 +37,11 @@ export const useTodoListViewModel = ({
       result = result.filter((todo) => filters.categories.includes(todo.category));
     }
 
+    // Apply priority filter (multi-select)
+    if (filters.priorities.length > 0) {
+      result = result.filter((todo) => filters.priorities.includes(todo.priority));
+    }
+
     // Apply search filter
     const searchText = filters.searchText.trim().toLowerCase();
     if (searchText) {

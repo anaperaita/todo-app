@@ -1,11 +1,16 @@
-import { useCallback, ChangeEvent } from 'react';
-import { TodoFilters, SortOption } from '../../types';
+import { useCallback, ChangeEvent, useState } from 'react';
+
+import { TodoFilters, SortOption, Priority } from '../../types';
 
 interface TodoFiltersViewModel {
   handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleStatusToggle: (statusId: string) => void;
   handleCategoryToggle: (category: string) => void;
+  handlePriorityToggle: (priority: Priority) => void;
   handleSortChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  handleClearAll: () => void;
+  activeTab: 'basic' | 'advanced';
+  setActiveTab: (tab: 'basic' | 'advanced') => void;
 }
 
 interface UseTodoFiltersViewModelProps {
@@ -21,6 +26,8 @@ export const useTodoFiltersViewModel = ({
   filters,
   onFilterChange,
 }: UseTodoFiltersViewModelProps): TodoFiltersViewModel => {
+  const [activeTab, setActiveTab] = useState<'basic' | 'advanced'>('basic');
+
   const handleSearchChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       onFilterChange({
@@ -59,6 +66,20 @@ export const useTodoFiltersViewModel = ({
     [filters, onFilterChange]
   );
 
+  const handlePriorityToggle = useCallback(
+    (priority: Priority) => {
+      const newPriorities = filters.priorities.includes(priority)
+        ? filters.priorities.filter((p) => p !== priority)
+        : [...filters.priorities, priority];
+
+      onFilterChange({
+        ...filters,
+        priorities: newPriorities,
+      });
+    },
+    [filters, onFilterChange]
+  );
+
   const handleSortChange = useCallback(
     (e: ChangeEvent<HTMLSelectElement>) => {
       onFilterChange({
@@ -69,10 +90,24 @@ export const useTodoFiltersViewModel = ({
     [filters, onFilterChange]
   );
 
+  const handleClearAll = useCallback(() => {
+    onFilterChange({
+      statuses: [],
+      categories: [],
+      priorities: [],
+      searchText: '',
+      sortBy: SortOption.DATE_ADDED,
+    });
+  }, [onFilterChange]);
+
   return {
     handleSearchChange,
     handleStatusToggle,
     handleCategoryToggle,
+    handlePriorityToggle,
     handleSortChange,
+    handleClearAll,
+    activeTab,
+    setActiveTab,
   };
 };

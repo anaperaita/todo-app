@@ -55,7 +55,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -70,7 +70,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -85,7 +85,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={[]}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText:'', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText:'', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -101,7 +101,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -117,7 +117,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO], categories: [], priorities: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -133,7 +133,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -149,7 +149,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText:'first', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText:'first', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -165,7 +165,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText:'work', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText:'work', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -181,7 +181,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO], categories: [], searchText:'work', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO], categories: [], priorities: [], searchText:'work', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -199,7 +199,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText: '', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -216,7 +216,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText:'', sortBy: SortOption.DATE_ADDED_DESC }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText:'', sortBy: SortOption.DATE_ADDED_DESC }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -233,7 +233,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText:'', sortBy: SortOption.PRIORITY }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText:'', sortBy: SortOption.PRIORITY }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -250,7 +250,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText:'', sortBy: SortOption.ALPHABETICAL }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText:'', sortBy: SortOption.ALPHABETICAL }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -267,7 +267,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText:'', sortBy: SortOption.DUE_DATE }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText:'', sortBy: SortOption.DUE_DATE }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -286,7 +286,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={[]}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText:'', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText:'', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -300,7 +300,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText:'nonexistent', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText:'nonexistent', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -316,7 +316,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={allCompletedTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO], categories: [], searchText:'', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO], categories: [], priorities: [], searchText:'', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -332,7 +332,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={mockTodos}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText:'   ', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText:'   ', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}
@@ -348,7 +348,7 @@ describe('TodoList', () => {
       renderWithStatus(
         <TodoList
           todos={todosWithoutCategory}
-          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], searchText:'first', sortBy: SortOption.DATE_ADDED }}
+          filters={{ statuses: [TEST_STATUS_IDS.TODO, TEST_STATUS_IDS.IN_PROGRESS, TEST_STATUS_IDS.DONE], categories: [], priorities: [], searchText:'first', sortBy: SortOption.DATE_ADDED }}
           onToggle={mockOnToggle}
           onDelete={mockOnDelete}
           onUpdate={mockOnUpdate}

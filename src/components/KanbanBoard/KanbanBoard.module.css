@@ -3,6 +3,8 @@
 .board {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
   animation: fadeInUp 600ms ease-out;
 }
 
@@ -88,9 +90,11 @@
   display: flex;
   gap: var(--spacing-lg);
   width: 100%;
+  flex: 1;
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: var(--spacing-sm);
+  align-items: flex-start;
 }
 
 .columnsContainer > * {
